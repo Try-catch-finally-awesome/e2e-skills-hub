@@ -60,6 +60,9 @@ function detectDatabase(reqContent: string | null, pyprojectContent: string | nu
   if (/\bpymongo\b/i.test(combined) || /\bmotor\b/i.test(combined)) {
     return 'mongodb';
   }
+  if (/\bpyodbc\b/i.test(combined) || /\bpymssql\b/i.test(combined) || /\baioodbc\b/i.test(combined)) {
+    return 'sqlserver';
+  }
   if (/\bredis\b/i.test(combined)) {
     return 'redis';
   }

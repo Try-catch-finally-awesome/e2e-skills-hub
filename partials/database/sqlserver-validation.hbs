@@ -1,0 +1,42 @@
+```yaml
+数据库验证配置（SQL Server）:
+  MCP 工具: {{mcp.database.name}}
+  数据库名: {{mcp.database.database}}
+
+  验证操作:
+    查询验证:
+      - 使用 SELECT 语句验证数据正确性
+      - 示例: SELECT TOP 1 * FROM {table} WHERE {condition} ORDER BY id DESC
+
+    新增验证:
+      - INSERT 后验证（使用 SCOPE_IDENTITY）:
+        SELECT * FROM {table} WHERE id = SCOPE_IDENTITY()
+      - 或按业务字段查询:
+        SELECT * FROM {table} WHERE order_no = '{test_value}' AND is_deleted = 0
+
+    更新验证:
+      - UPDATE 后验证:
+        SELECT {updated_fields} FROM {table} WHERE id = {id}
+      - 验证更新时间:
+        SELECT update_time FROM {table} WHERE id = {id}
+
+    删除验证:
+      - 软删除验证:
+        SELECT is_deleted, delete_time FROM {table} WHERE id = {id}
+      - 硬删除验证:
+        SELECT COUNT(*) FROM {table} WHERE id = {id}（期望结果为 0）
+
+    数量验证:
+      - SELECT COUNT(*) FROM {table} WHERE {condition}
+
+  SQL Server 特有注意事项:
+    - 分页语法: 使用 OFFSET/FETCH 而非 LIMIT（如 OFFSET 0 ROWS FETCH NEXT 10 ROWS ONLY）
+    - 字符串: NVARCHAR 类型用于 Unicode 支持（N'中文内容'）
+    - 时间字段: DATETIME2 格式 'YYYY-MM-DD HH:MM:SS.nnnnnnn'
+    - 自增 ID: IDENTITY(1,1) 特性，使用 SCOPE_IDENTITY() 获取
+    - 架构: 注意 dbo 默认架构（dbo.{table}）
+    - 事务隔离级别: 默认 READ COMMITTED
+    - 大小写: 取决于排序规则（Collation）设置
+    - TOP 语法: 使用 TOP N 而非 LIMIT N
+    - 布尔值: 使用 BIT 类型（0/1），非 BOOLEAN
+```

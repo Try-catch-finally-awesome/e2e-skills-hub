@@ -87,6 +87,9 @@ function detectDatabase(pkg: PackageJson): string {
   if ('mongodb' in deps || 'mongoose' in deps) {
     return 'mongodb';
   }
+  if ('mssql' in deps || 'tedious' in deps) {
+    return 'sqlserver';
+  }
   if ('redis' in deps || 'ioredis' in deps) {
     return 'redis';
   }

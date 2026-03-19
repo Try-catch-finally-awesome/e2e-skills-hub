@@ -66,6 +66,9 @@ function detectDatabase(content: string): string {
   if (content.includes('mongodb') || content.includes('spring-boot-starter-data-mongodb')) {
     return 'mongodb';
   }
+  if (content.includes('mssql-jdbc') || content.includes('sqlserver')) {
+    return 'sqlserver';
+  }
   return '';
 }
 

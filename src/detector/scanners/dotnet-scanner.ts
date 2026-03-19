@@ -53,6 +53,13 @@ function detectDatabase(content: string): string {
   if (content.includes('MongoDB.Driver')) {
     return 'mongodb';
   }
+  if (
+    content.includes('Microsoft.EntityFrameworkCore.SqlServer') ||
+    content.includes('System.Data.SqlClient') ||
+    content.includes('Microsoft.Data.SqlClient')
+  ) {
+    return 'sqlserver';
+  }
   if (content.includes('StackExchange.Redis')) {
     return 'redis';
   }

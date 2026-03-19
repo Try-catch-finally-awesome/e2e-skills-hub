@@ -43,6 +43,9 @@ function detectDatabase(content: string): string {
   if (content.includes('go.mongodb.org/mongo-driver')) {
     return 'mongodb';
   }
+  if (content.includes('denisenkom/go-mssqldb') || content.includes('microsoft/go-mssqldb') || content.includes('gorm.io/driver/sqlserver')) {
+    return 'sqlserver';
+  }
   if (content.includes('go-redis/redis') || content.includes('redis/go-redis')) {
     return 'redis';
   }

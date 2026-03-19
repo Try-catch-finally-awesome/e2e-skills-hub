@@ -118,6 +118,16 @@ function detectDatabase(composer: ComposerJson): string {
     return 'postgresql';
   }
 
+  // SQL Server
+  if (
+    'ext-sqlsrv' in deps ||
+    'ext-pdo_sqlsrv' in deps ||
+    depKeys.includes('sqlsrv') ||
+    depKeys.includes('pdo_sqlsrv')
+  ) {
+    return 'sqlserver';
+  }
+
   // Redis
   if ('predis/predis' in deps || 'ext-redis' in deps) {
     return 'redis';
