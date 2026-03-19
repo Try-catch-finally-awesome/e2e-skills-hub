@@ -1,0 +1,19 @@
+{
+  "name": "e2e-skills-hub",
+  "version": "1.0.0",
+  "description": "Auto-detect project tech stacks and generate customized E2E testing skills. Supports Java/Python/Go/.NET/Node.js/PHP backends with React/Vue/Angular frontends.",
+  "author": {
+    "name": "Try-catch-finally-awesome"
+  },
+  "repository": "https://github.com/Try-catch-finally-awesome/e2e-skills-hub",
+  "license": "MIT",
+  "keywords": [
+    "e2e-testing",
+    "playwright",
+    "test-automation",
+    "skills-generator",
+    "tech-stack-detection"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}

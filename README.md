@@ -14,20 +14,32 @@ Claude Code 插件，自动检测项目技术栈，生成定制化 E2E 全流程
 
 ## 安装
 
-### 方式一：通过 Claude Code 安装
+### 方式一：通过 Claude Code 插件系统安装（推荐）
 
-```bash
-claude install e2e-skills-hub
+在 Claude Code 中执行：
+
+```
+/plugin marketplace add Try-catch-finally-awesome/e2e-skills-hub
+/plugin install e2e-skills-hub@e2e-skills-hub
 ```
 
-### 方式二：手动 Git Clone
+安装后插件会自动注册所有 `/e2e-skills-hub:*` 命令。
+
+### 方式二：本地开发模式
 
 ```bash
 git clone https://github.com/Try-catch-finally-awesome/e2e-skills-hub.git
 cd e2e-skills-hub
-npm install
-npm run build
+npm install && npm run build
 ```
+
+然后在 Claude Code 中加载本地插件：
+
+```bash
+claude --plugin-dir ./e2e-skills-hub
+```
+
+开发过程中修改代码后，在 Claude Code 中执行 `/reload-plugins` 重新加载。
 
 ## 快速开始
 
@@ -110,6 +122,9 @@ npm run build
 
 ```
 e2e-skills-hub/
+  .claude-plugin/
+    plugin.json       # 插件清单（名称、版本、描述）
+  .mcp.json           # MCP 服务器配置（Playwright 自动安装）
   src/
     detector/         # 技术栈检测引擎
       scanners/       # 各语言/框架扫描器
@@ -121,7 +136,7 @@ e2e-skills-hub/
     utils/            # 工具函数
   templates/          # 6 个 Skill 的 Handlebars 模板
   partials/           # 可复用的模板片段（按技术栈分组）
-  skills/             # 11 个管理型 slash command
+  skills/             # 11 个 slash command（插件自动注册）
   tests/              # 测试用例与夹具
 ```
 
