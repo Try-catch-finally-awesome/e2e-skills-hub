@@ -78,11 +78,22 @@ npm run build
 | 语言 | 框架 | ORM | 数据库 |
 |------|------|-----|--------|
 | Java | Spring Boot, Spring MVC | MyBatis Plus, MyBatis, JPA/Hibernate | MySQL, PostgreSQL, SQL Server, Redis, MongoDB |
-| Python | Django, FastAPI, Flask | Django ORM, SQLAlchemy | MySQL, PostgreSQL, SQLite, SQL Server, MongoDB |
-| Go | Gin | GORM | MySQL, PostgreSQL, SQLite, SQL Server |
+| Python | Django, FastAPI, Flask | Django ORM, SQLAlchemy | MySQL, PostgreSQL, SQLite, SQL Server, Redis, MongoDB |
+| Go | Gin | GORM | MySQL, PostgreSQL, SQLite, SQL Server, Redis |
 | .NET | ASP.NET Core | Entity Framework, Dapper | SQL Server, PostgreSQL, MySQL, Redis |
-| Node.js | Express, NestJS | TypeORM, Prisma | MySQL, PostgreSQL, SQL Server, MongoDB |
+| Node.js | Express, NestJS | TypeORM, Prisma | MySQL, PostgreSQL, SQL Server, Redis, MongoDB |
 | PHP | ThinkPHP, Laravel, Swoole | Eloquent, think-orm | MySQL, PostgreSQL, SQL Server, Redis, MongoDB |
+
+### 支持的 Redis 客户端库
+
+| 语言 | 检测的 Redis 库 |
+|------|----------------|
+| Java | spring-boot-starter-data-redis, Jedis, Lettuce |
+| .NET | StackExchange.Redis, NewLife.Core, CSRedisCore, ServiceStack.Redis, FreeRedis, OSRedis |
+| Python | redis-py, django-redis |
+| Go | go-redis |
+| Node.js | redis, ioredis |
+| PHP | predis, ext-redis |
 
 ### 前端
 
