@@ -60,7 +60,16 @@ function detectDatabase(content: string): string {
   ) {
     return 'sqlserver';
   }
-  if (content.includes('StackExchange.Redis') || content.includes('Microsoft.Extensions.Caching.StackExchangeRedis')) {
+  if (
+    content.includes('StackExchange.Redis') ||
+    content.includes('Microsoft.Extensions.Caching.StackExchangeRedis') ||
+    content.includes('CSRedisCore') ||
+    content.includes('ServiceStack.Redis') ||
+    content.includes('NewLife.Redis') ||
+    content.includes('NewLife.Core') ||
+    content.includes('FreeRedis') ||
+    content.includes('OSRedis')
+  ) {
     return 'redis';
   }
   return '';
