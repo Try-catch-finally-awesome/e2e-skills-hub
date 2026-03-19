@@ -60,7 +60,7 @@ function detectDatabase(content: string): string {
   ) {
     return 'sqlserver';
   }
-  if (content.includes('StackExchange.Redis')) {
+  if (content.includes('StackExchange.Redis') || content.includes('Microsoft.Extensions.Caching.StackExchangeRedis')) {
     return 'redis';
   }
   return '';

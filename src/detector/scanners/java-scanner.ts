@@ -69,6 +69,9 @@ function detectDatabase(content: string): string {
   if (content.includes('mssql-jdbc') || content.includes('sqlserver')) {
     return 'sqlserver';
   }
+  if (content.includes('spring-boot-starter-data-redis') || content.includes('jedis') || content.includes('lettuce-core')) {
+    return 'redis';
+  }
   return '';
 }
 

@@ -77,10 +77,10 @@ npm run build
 
 | 语言 | 框架 | ORM | 数据库 |
 |------|------|-----|--------|
-| Java | Spring Boot, Spring MVC | MyBatis Plus, MyBatis, JPA/Hibernate | MySQL, PostgreSQL, SQL Server, MongoDB |
+| Java | Spring Boot, Spring MVC | MyBatis Plus, MyBatis, JPA/Hibernate | MySQL, PostgreSQL, SQL Server, Redis, MongoDB |
 | Python | Django, FastAPI, Flask | Django ORM, SQLAlchemy | MySQL, PostgreSQL, SQLite, SQL Server, MongoDB |
 | Go | Gin | GORM | MySQL, PostgreSQL, SQLite, SQL Server |
-| .NET | ASP.NET Core | Entity Framework, Dapper | SQL Server, PostgreSQL, MySQL |
+| .NET | ASP.NET Core | Entity Framework, Dapper | SQL Server, PostgreSQL, MySQL, Redis |
 | Node.js | Express, NestJS | TypeORM, Prisma | MySQL, PostgreSQL, SQL Server, MongoDB |
 | PHP | ThinkPHP, Laravel, Swoole | Eloquent, think-orm | MySQL, PostgreSQL, SQL Server, Redis, MongoDB |
 
