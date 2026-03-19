@@ -1,0 +1,40 @@
+```yaml
+表名提取方式（Dapper）:
+  说明: Dapper 是轻量级 ORM，直接编写 SQL，表名需从 SQL 语句中提取。
+
+  a. 从 Repository/DAL 层的 SQL 字符串提取:
+     搜索: Grep(pattern="FROM\\s+\\w+|INSERT\\s+INTO\\s+\\w+|UPDATE\\s+\\w+|JOIN\\s+\\w+", path="{{backend.projectPath}}")
+     示例:
+       connection.QueryAsync<Order>("SELECT * FROM bos_orders WHERE id = @Id", new { Id = id });
+     → 表名: bos_orders
+
+  b. 从 SQL 查询方法中的字符串提取:
+     搜索: Grep(pattern="Query<|QueryAsync<|Execute|ExecuteAsync|QueryFirst|QuerySingle", path="{{backend.projectPath}}")
+     读取方法体中的 SQL 字符串，提取 FROM/INTO/UPDATE/JOIN 后的表名
+
+  c. 从存储过程调用提取:
+     搜索: Grep(pattern="CommandType\\.StoredProcedure|commandType:\\s*CommandType", path="{{backend.projectPath}}")
+     示例:
+       connection.Execute("sp_create_order", param, commandType: CommandType.StoredProcedure);
+     → 存储过程: sp_create_order（需进一步查询存储过程定义确认表名）
+
+  d. 从 SQL 文件或嵌入资源提取:
+     搜索: Glob(pattern="{{backend.projectPath}}/**/*.sql")
+     解析 SQL 文件中的 CREATE TABLE、SELECT FROM 等语句提取表名
+
+  e. 从 Model/Entity 类名推断（如项目约定表名与类名对应）:
+     搜索: Grep(pattern="class\\s+\\w+", path="{{backend.projectPath}}/Models")
+     示例: class Order → 可能对应表名 Orders 或 bos_orders（需结合 SQL 确认）
+
+  f. 从 Dapper.Contrib 的 [Table] 特性提取（如使用 Contrib 扩展）:
+     搜索: Grep(pattern="\\[Table\\(", path="{{backend.projectPath}}")
+     示例:
+       [Table("bos_orders")]
+       public class Order { ... }
+     → 表名: bos_orders
+
+  g. 汇总所有关联表名:
+     - 主表: 从 SQL 的 FROM/INTO/UPDATE 子句
+     - 关联表: 从 SQL 的 JOIN 子句
+     - 注意: Dapper 的表名分散在各 SQL 语句中，需全面搜索 Repository/DAL 层
+```
