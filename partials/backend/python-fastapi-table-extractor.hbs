@@ -1,0 +1,26 @@
+```yaml
+表名提取方式（Python FastAPI + SQLAlchemy）:
+  a. 从 SQLAlchemy Model 的 __tablename__ 属性提取:
+     搜索: Grep(pattern="__tablename__", path="{{backend.projectPath}}")
+     示例:
+       class Order(Base):
+           __tablename__ = "orders"
+     → 表名: orders
+
+  b. 从 Alembic Migration 文件确认表名（如有）:
+     搜索: Glob(pattern="{{backend.projectPath}}/alembic/versions/*.py")
+     查看 op.create_table() 中的表名
+
+  c. 从 SQLAlchemy Model 类名推断默认表名:
+     如未定义 __tablename__，SQLAlchemy 默认使用类名小写
+     示例: Order → order
+
+  d. 从 relationship() 和 ForeignKey() 提取关联表:
+     示例: supplier_id = Column(Integer, ForeignKey("suppliers.id"))
+     → 关联表: suppliers
+
+  e. 汇总所有关联表名:
+     - 主表: 从 __tablename__ 提取
+     - 关联表: 从 ForeignKey 引用
+     - 多对多中间表: 从 secondary 参数提取
+```

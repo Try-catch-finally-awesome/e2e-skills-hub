@@ -1,0 +1,48 @@
+```yaml
+页面功能分析（React 组件）:
+  a. 读取页面组件的 JSX/TSX 返回内容，提取:
+     表格:
+       - 组件名: {{frontend.uiLibrary}} 的表格组件（Table / ProTable / DataGrid）
+       - 列定义: columns 数组属性
+       - 操作列: render 函数中的编辑/删除/详情按钮
+       - 选择列: rowSelection 属性
+       - 排序: sorter 属性
+       - 分页: pagination 属性
+
+     查询表单:
+       - 搜索条件字段: Input / Select / DatePicker 等
+       - 查询按钮和重置按钮
+       - ProTable 的 search 配置（如有）
+
+     操作按钮:
+       - 新增按钮（onClick 触发状态变更打开弹窗）
+       - 批量删除按钮
+       - 导入/导出按钮
+       - 其他业务操作按钮
+
+     弹窗/表单:
+       - 新增/编辑弹窗（Modal / Drawer / Dialog）
+       - 表单字段（Form.Item / FormItem）
+       - 表单校验规则（rules 属性）
+       - 提交/取消按钮
+
+  b. 读取组件逻辑部分，提取:
+     - useState 中的表单数据和弹窗状态
+     - useEffect 中的数据加载逻辑
+     - 表单提交处理函数（onFinish / onSubmit / handleSubmit）
+     - 表单校验（form.validateFields / Yup schema / Zod schema）
+
+  c. 分析表单校验规则:
+     Ant Design Form.Item rules:
+       - required: true → 必填项
+       - type: 'string'/'number'/'email' → 类型校验
+       - min/max → 数值/长度限制
+       - pattern → 正则校验
+       - validator → 自定义校验函数
+
+     React Hook Form + Yup/Zod:
+       搜索: Grep(pattern="yup\\.string|z\\.string|useForm", path="{{frontend.projectPath}}/src")
+       - Yup: yup.string().required().min(n).max(n)
+       - Zod: z.string().min(n).max(n).email()
+       - register() / control 绑定校验
+```

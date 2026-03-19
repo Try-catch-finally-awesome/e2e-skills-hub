@@ -1,0 +1,25 @@
+```yaml
+编译检查（Python FastAPI）:
+  命令: cd {{backend.projectPath}} && python -m py_compile {modified_file}
+  说明: Python 语法编译检查
+
+  额外检查:
+    - 类型检查（如有 mypy）: cd {{backend.projectPath}} && mypy {modified_file}
+    - Import 检查: cd {{backend.projectPath}} && python -c "from {module} import {class_name}"
+    - 启动检查: cd {{backend.projectPath}} && python -c "from main import app"
+
+  检查项:
+    - Python 语法错误
+    - Pydantic Model 定义问题（字段类型、校验器签名）
+    - SQLAlchemy Model 定义问题
+    - Router 注册问题
+    - 依赖注入循环引用
+    - Import 路径错误
+
+  常见检查错误及修复:
+    - "SyntaxError": Python 语法错误
+    - "ImportError": 模块引用错误或循环引用
+    - "PydanticUserError": Pydantic Model 定义不正确
+    - "ArgumentError": SQLAlchemy 参数错误
+    - "InvalidRequestError": SQLAlchemy 请求配置错误
+```

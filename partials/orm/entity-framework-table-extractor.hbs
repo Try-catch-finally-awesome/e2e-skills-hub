@@ -1,0 +1,46 @@
+```yaml
+表名提取方式（Entity Framework Core）:
+  a. 从 Entity 的 [Table] 特性提取:
+     搜索: Grep(pattern="\\[Table\\(", path="{{backend.projectPath}}")
+     示例:
+       [Table("bos_orders")]
+       public class Order { ... }
+     → 表名: bos_orders
+
+  b. 从 DbContext 的 OnModelCreating 配置提取:
+     搜索: Grep(pattern="ToTable\\(|HasTableName\\(", path="{{backend.projectPath}}")
+     示例:
+       modelBuilder.Entity<Order>().ToTable("bos_orders");
+     → 表名: bos_orders
+
+  c. 从 DbSet<T> 属性名推断默认表名:
+     搜索: Grep(pattern="DbSet<", path="{{backend.projectPath}}")
+     EF Core 默认使用 DbSet 属性名:
+     示例: public DbSet<Order> Orders { get; set; } → 表名: Orders
+
+  d. 从 [Column] 特性提取字段映射:
+     搜索: Grep(pattern="\\[Column\\(", path="{{backend.projectPath}}")
+     示例: [Column("order_no")] → 数据库字段: order_no
+
+  e. 从 Fluent API 配置提取关联:
+     搜索: Grep(pattern="HasOne|HasMany|HasForeignKey|WithMany|WithOne", path="{{backend.projectPath}}")
+     示例:
+       modelBuilder.Entity<Order>()
+           .HasOne(o => o.Supplier)
+           .WithMany(s => s.Orders)
+           .HasForeignKey(o => o.SupplierId);
+
+  f. 从 Migration 文件确认:
+     搜索: Glob(pattern="{{backend.projectPath}}/**/Migrations/*.cs")
+     查看 migrationBuilder.CreateTable(name: "bos_orders", ...)
+
+  g. 从 EF 命名规则确认:
+     检查是否配置了自定义命名约定:
+     modelBuilder.Model.GetEntityTypes() 遍历实体
+     默认: 类名作为表名（不转换）
+
+  h. 汇总所有关联表名:
+     - 主表: 从 [Table] 特性或 ToTable() 或 DbSet 名
+     - 关联表: 从导航属性和 Fluent API 关系配置
+     - 中间表: 从 UsingEntity() 或自动生成的 M2M 中间表
+```

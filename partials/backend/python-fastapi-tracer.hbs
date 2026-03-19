@@ -1,0 +1,37 @@
+```yaml
+搜索顺序:
+  a. 在后端项目中搜索 Router/Endpoint:
+     Grep(pattern="{api_keyword}", path="{{backend.projectPath}}")
+     重点搜索: **/routers/ 或 **/api/ 目录
+     匹配: @router.get / @router.post / @app.get / @app.post 装饰器
+
+  b. 读取后端相关文件（FastAPI 分层结构）:
+     - Router 文件（APIRouter 实例和路由装饰器）
+       搜索路径: {{backend.projectPath}}/**/routers/ 或 **/api/
+     - Endpoint 函数（路由处理函数）
+       提取: 函数签名、参数类型标注、Depends() 依赖注入
+     - Pydantic Model / Schema（请求/响应模型）
+       搜索路径: {{backend.projectPath}}/**/schemas/ 或 **/models/
+       提取: BaseModel 子类的字段定义和校验器
+     - Service / CRUD 层（业务逻辑）
+       搜索路径: {{backend.projectPath}}/**/services/ 或 **/crud/
+     - Database Model（SQLAlchemy Model 或 Tortoise Model）
+       搜索路径: {{backend.projectPath}}/**/models/
+     - Dependencies（依赖注入函数）
+       搜索路径: {{backend.projectPath}}/**/dependencies.py 或 **/deps.py
+
+  c. 追踪调用链:
+     - 从 main.py 的 app.include_router() 找到 Router 模块
+     - 从 Router 装饰器找到 Endpoint 函数
+     - 从 Endpoint 参数类型找到 Pydantic Schema
+     - 从 Depends() 找到依赖注入的 Service/CRUD 函数
+     - 从 Service/CRUD 找到 Database Model
+     - 从 Database Model 提取表名
+
+  d. 记录每个文件的关键信息:
+     - Router: 路由前缀(prefix)、标签(tags)
+     - Endpoint: URL 路径、HTTP 方法、参数类型、响应模型(response_model)
+     - Schema: 字段列表、Field() 校验、validator 方法
+     - Service: 业务方法签名、数据库会话处理
+     - Model: 字段定义、__tablename__、关系(relationship)
+```

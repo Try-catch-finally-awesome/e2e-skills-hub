@@ -1,0 +1,38 @@
+```yaml
+搜索顺序:
+  a. 在后端项目中搜索 View/ViewSet:
+     Grep(pattern="{api_keyword}", path="{{backend.projectPath}}")
+     重点搜索: **/views.py 或 **/viewsets.py
+     匹配: urlpatterns 中的 path()/re_path()，或 @api_view / class-based views
+
+  b. 读取后端相关文件（Django 分层结构）:
+     - Views/ViewSets: views.py 或 viewsets.py
+       搜索路径: {{backend.projectPath}}/**/views.py
+       类型: @api_view 装饰器函数 或 APIView/ViewSet/ModelViewSet 类
+     - Serializers: serializers.py（请求/响应序列化）
+       搜索路径: {{backend.projectPath}}/**/serializers.py
+       提取: 字段定义、校验方法（validate_xxx）、Meta.fields
+     - Models: models.py（Django Model 定义）
+       搜索路径: {{backend.projectPath}}/**/models.py
+       提取: 字段定义、Meta 配置、模型方法
+     - URLs: urls.py（路由配置）
+       搜索路径: {{backend.projectPath}}/**/urls.py
+       提取: urlpatterns、router.register()
+     - Filters: filters.py（查询过滤器，如有）
+       搜索路径: {{backend.projectPath}}/**/filters.py
+       提取: FilterSet 字段定义
+     - Permissions: permissions.py（权限控制，如有）
+       搜索路径: {{backend.projectPath}}/**/permissions.py
+
+  c. 追踪调用链:
+     - 从 urls.py 的 path() 或 router.register() 找到 View/ViewSet
+     - 从 View/ViewSet 中找到引用的 Serializer
+     - 从 Serializer 的 Meta.model 找到 Model
+     - 从 Model 的 class Meta: db_table 或类名推断表名
+
+  d. 记录每个文件的关键信息:
+     - View: URL 路径、HTTP 方法、视图类型（函数/类视图）
+     - Serializer: 字段列表、校验规则、嵌套序列化器
+     - Model: 字段列表、db_table、外键关系
+     - Filter: 可过滤字段、过滤类型
+```

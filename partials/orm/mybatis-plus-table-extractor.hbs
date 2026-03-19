@@ -1,0 +1,38 @@
+```yaml
+表名提取方式（MyBatis Plus）:
+  a. 从 Entity 的 @TableName 注解提取:
+     搜索: Grep(pattern="@TableName", path="{{backend.projectPath}}/src/main/java")
+     示例:
+       @TableName("bos_orders")
+       public class Order extends BaseEntity { ... }
+     → 表名: bos_orders
+
+  b. 从 Mapper XML 中的 SQL 语句提取表名（自定义 SQL）:
+     搜索: Glob(pattern="{{backend.projectPath}}/src/main/resources/mapper/*.xml")
+     提取:
+     - <select> 标签中 FROM 后的表名
+     - <insert> 标签中 INTO 后的表名
+     - <update> 标签中 UPDATE 后的表名
+     - <delete> 标签中 FROM 后的表名
+     - JOIN 语句中的关联表名
+
+  c. 从 @TableField 注解提取字段映射:
+     搜索: Grep(pattern="@TableField", path="{{backend.projectPath}}/src/main/java")
+     示例: @TableField("order_no") → 数据库字段: order_no
+     注意: @TableField(exist = false) 表示非数据库字段
+
+  d. 从 BaseMapper<T> 泛型推断默认表名:
+     如 Entity 没有 @TableName 注解:
+     MyBatis Plus 默认规则: 驼峰类名 → 下划线表名
+     示例: BosOrder → bos_order
+     全局配置: mybatis-plus.global-config.db-config.table-prefix 可能添加前缀
+
+  e. 从 Wrapper 查询中提取额外表:
+     搜索: Grep(pattern="QueryWrapper|LambdaQueryWrapper|inSql|apply", path="{{backend.projectPath}}/src/main/java")
+     可能包含子查询或 SQL 片段引用的表
+
+  f. 汇总所有关联表名:
+     - 主表: 从 @TableName 注解提取
+     - 关联表: 从 Mapper XML 的 JOIN 语句或 Service 层的关联查询
+     - 子表: 从批量操作或事务中的多表操作
+```

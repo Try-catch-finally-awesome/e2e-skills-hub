@@ -1,0 +1,29 @@
+```yaml
+编译检查（Node.js Express）:
+  TypeScript 项目:
+    命令: cd {{backend.projectPath}} && npx tsc --noEmit
+    说明: TypeScript 类型检查，不生成输出文件
+
+  JavaScript 项目:
+    命令: node -c {modified_file}
+    说明: Node.js 语法检查
+
+  额外检查:
+    - ESLint: cd {{backend.projectPath}} && npx eslint {modified_file}
+    - 依赖检查: cd {{backend.projectPath}} && npm ls
+
+  检查项:
+    - JavaScript/TypeScript 语法错误
+    - 类型不匹配（TypeScript）
+    - 缺失的模块导入
+    - 模型定义问题
+    - 路由注册遗漏
+
+  常见编译错误及修复:
+    - "TS2304 Cannot find name 'xxx'": 未定义的类型/变量，检查 import
+    - "TS2345 Argument of type 'xxx' is not assignable": 类型不匹配
+    - "TS2339 Property 'xxx' does not exist on type": 属性不存在
+    - "TS2307 Cannot find module 'xxx'": 模块未安装或路径错误
+    - "SyntaxError: Unexpected token": JavaScript 语法错误
+    - "ERR_MODULE_NOT_FOUND": ESM 模块路径错误
+```

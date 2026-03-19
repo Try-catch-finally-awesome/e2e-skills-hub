@@ -1,0 +1,35 @@
+```yaml
+判断条件（满足任一即归因为后端 - Node.js Express）:
+  - 后端返回 HTTP 5xx
+  - 数据库操作异常（Sequelize/Mongoose/Prisma 错误）
+  - 业务逻辑错误（状态流转不正确、计算错误）
+  - 数据库查询结果与预期不符
+  - 中间件处理错误
+  - 未捕获的异步异常（UnhandledPromiseRejection）
+
+常见异常类型:
+  - TypeError: 类型错误（undefined 上调用方法、参数类型不匹配）
+  - ReferenceError: 引用未定义的变量
+  - SyntaxError: JSON 解析失败或语法错误
+  - ValidationError (Mongoose): Schema 校验失败
+  - CastError (Mongoose): 类型转换失败（如无效的 ObjectId）
+  - MongoError / MongoServerError: MongoDB 操作错误
+  - SequelizeUniqueConstraintError: 唯一约束违反
+  - SequelizeForeignKeyConstraintError: 外键约束违反
+  - SequelizeValidationError: Sequelize 模型校验失败
+  - SequelizeDatabaseError: SQL 执行错误
+  - PrismaClientKnownRequestError: Prisma 已知错误（P2002 唯一约束、P2025 记录不存在等）
+  - PrismaClientValidationError: Prisma 查询参数校验失败
+  - JsonWebTokenError: JWT 令牌错误
+  - TokenExpiredError: JWT 令牌过期
+  - MulterError: 文件上传错误
+  - ECONNREFUSED: 数据库连接被拒绝
+
+修复范围: {{backend.projectPath}}/src/ 或 {{backend.projectPath}}/ 下的 JS/TS 文件
+编译验证: cd {{backend.projectPath}} && npx tsc --noEmit（TypeScript 项目）
+           或 node -c {modified_file}（JavaScript 项目语法检查）
+
+服务重启提示:
+  - 使用 nodemon/ts-node-dev 开发模式通常自动重启
+  - 手动重启: cd {{backend.projectPath}} && npm run dev
+```

@@ -1,0 +1,40 @@
+```yaml
+搜索顺序:
+  a. 在后端项目中搜索 Controller:
+     Grep(pattern="{api_keyword}", path="{{backend.projectPath}}/src")
+     重点搜索: *.controller.ts 文件
+     匹配: @Controller() / @Get() / @Post() 装饰器中的 API 路径
+
+  b. 读取后端相关文件（NestJS 模块化分层结构）:
+     - Controller 文件（*.controller.ts）
+       搜索路径: {{backend.projectPath}}/src/**/*.controller.ts
+       提取: @Controller() 路由前缀、@Get/@Post/@Put/@Delete 装饰器
+     - Service 文件（*.service.ts）
+       搜索路径: {{backend.projectPath}}/src/**/*.service.ts
+       提取: @Injectable() 服务类、业务方法
+     - Entity 文件（*.entity.ts）
+       搜索路径: {{backend.projectPath}}/src/**/*.entity.ts
+       提取: @Entity() 装饰器、@Column() 字段定义
+     - DTO 文件（*.dto.ts）
+       搜索路径: {{backend.projectPath}}/src/**/*.dto.ts 或 **/dto/
+       提取: class-validator 装饰器校验规则
+     - Module 文件（*.module.ts）
+       搜索路径: {{backend.projectPath}}/src/**/*.module.ts
+       提取: imports/providers/controllers 注册
+     - Repository 文件（*.repository.ts，如有自定义仓库）
+       搜索路径: {{backend.projectPath}}/src/**/*.repository.ts
+
+  c. 追踪调用链:
+     - 从 Module 的 controllers 数组找到 Controller
+     - 从 Controller 构造函数注入找到 Service
+     - 从 Service 构造函数注入找到 Repository 或 Entity
+     - 从 Entity 的 @Entity() 装饰器提取表名
+     - 模块关系通过 Module 的 imports 数组追踪
+
+  d. 记录每个文件的关键信息:
+     - Controller: 路由前缀、HTTP 方法装饰器、参数装饰器(@Body/@Param/@Query)
+     - Service: 注入的依赖、业务方法签名
+     - Entity: 字段列表、@Column 选项、关系装饰器(@OneToMany/@ManyToOne)
+     - DTO: 字段列表、class-validator 校验装饰器
+     - Module: 依赖的其他模块、提供的服务
+```

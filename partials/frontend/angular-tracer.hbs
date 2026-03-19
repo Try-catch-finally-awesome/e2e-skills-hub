@@ -1,0 +1,33 @@
+```yaml
+搜索顺序:
+  a. 在前端路由配置中搜索路径关键词:
+     Grep(pattern="{route_keyword}", path="{{frontend.projectPath}}/src")
+     目标文件: app-routing.module.ts / app.routes.ts 或 *-routing.module.ts
+     匹配: path: 'xxx' 路由配置
+
+  b. 从路由配置找到页面组件:
+     如: loadComponent: () => import('./pages/xxx/xxx.component').then(m => m.XxxComponent)
+     或: component: XxxComponent
+     → 页面组件: src/app/pages/xxx/xxx.component.ts + xxx.component.html
+
+  c. 读取页面组件（*.component.ts + *.component.html），记录:
+     - 组件文件路径（.ts + .html + .scss/.css）
+     - *.component.ts 中的所有 import 语句
+     - 注入的 Service（constructor 参数）
+     - 使用的子组件（模板中引用的组件选择器）
+     - 使用的 UI 组件（{{frontend.uiLibrary}} 组件名）
+     - 页面包含的功能:
+       - 表格组件（mat-table / nz-table / p-table）
+       - 表单组件（form / [formGroup] / ngModel）
+       - 按钮（新增、编辑、删除、导出等）
+       - 对话框/抽屉（MatDialog / NzModal / Dialog）
+       - 搜索/查询区域
+       - 分页组件（mat-paginator / nz-pagination）
+
+  d. 分析组件结构:
+     - @Input() / @Output() 输入输出属性
+     - ngOnInit() / ngOnDestroy() 等生命周期钩子
+     - FormGroup / FormControl 表单控制
+     - Observable / BehaviorSubject 响应式数据流
+     - RxJS 操作符使用（switchMap, map, tap 等）
+```

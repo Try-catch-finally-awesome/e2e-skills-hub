@@ -1,0 +1,59 @@
+```yaml
+测试框架配置（Jest）:
+  框架: Jest
+  语言: JavaScript / TypeScript
+
+  测试运行命令:
+    全量测试: cd {{backend.projectPath}} && npx jest
+    指定测试文件: cd {{backend.projectPath}} && npx jest {test_file}
+    指定测试名: cd {{backend.projectPath}} && npx jest -t "{test_name_pattern}"
+    监听模式: cd {{backend.projectPath}} && npx jest --watch
+    覆盖率: cd {{backend.projectPath}} && npx jest --coverage
+    详细输出: cd {{backend.projectPath}} && npx jest --verbose
+    失败即停: cd {{backend.projectPath}} && npx jest --bail
+
+  测试文件位置:
+    路径: {{backend.projectPath}}/__tests__/ 或与源代码同目录
+    命名规范: *.test.ts / *.test.js / *.spec.ts / *.spec.js
+    示例: order.service.test.ts
+
+  常用功能:
+    - describe('模块名', () => { ... }): 测试套件
+    - it('用例描述', () => { ... }) / test('用例描述', () => { ... }): 测试用例
+    - beforeEach / afterEach: 每个测试前后执行
+    - beforeAll / afterAll: 所有测试前后执行
+    - it.skip / it.only: 跳过/仅运行特定测试
+    - it.each(table): 参数化测试
+
+  断言:
+    - expect(value).toBe(expected): 严格相等
+    - expect(value).toEqual(expected): 深度相等
+    - expect(value).toBeTruthy() / .toBeFalsy(): 布尔断言
+    - expect(value).toBeNull() / .toBeDefined() / .toBeUndefined(): 空值断言
+    - expect(value).toContain(item): 包含断言
+    - expect(value).toHaveLength(n): 长度断言
+    - expect(fn).toThrow(Error): 异常断言
+    - expect(value).toMatchObject(subset): 对象子集匹配
+    - expect(value).toHaveProperty('key', value): 属性断言
+    - expect(fn).toHaveBeenCalledWith(args): Mock 调用参数断言
+
+  Mock:
+    - jest.fn(): 创建 Mock 函数
+    - jest.mock('module'): Mock 整个模块
+    - jest.spyOn(object, 'method'): Spy 方法
+    - mockReturnValue / mockResolvedValue: 设置返回值
+    - mockImplementation: 自定义实现
+
+  NestJS 集成测试:
+    - Test.createTestingModule(): 创建测试模块
+    - module.get<Service>(Service): 获取服务实例
+    - supertest(app.getHttpServer()): HTTP 请求测试
+
+  Express 集成测试:
+    - supertest(app): HTTP 请求测试
+    - request(app).get('/api/xxx').expect(200)
+
+  测试报告:
+    覆盖率: {{backend.projectPath}}/coverage/ 目录
+    JUnit XML: cd {{backend.projectPath}} && npx jest --reporters=jest-junit
+```

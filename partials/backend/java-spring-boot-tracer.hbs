@@ -1,0 +1,38 @@
+```yaml
+搜索顺序:
+  a. 在后端项目中搜索 Controller:
+     Grep(pattern="{api_keyword}", path="{{backend.projectPath}}/src/main/java")
+     重点搜索: **/controller/ 目录
+     匹配: @RequestMapping / @GetMapping / @PostMapping 注解中包含 API 路径
+
+  b. 读取后端相关文件（Spring Boot 分层结构）:
+     - Controller 文件（@RestController, @RequestMapping）
+       搜索路径: {{backend.projectPath}}/src/main/java/**/controller/
+     - Service 接口 + ServiceImpl 实现类
+       搜索路径: {{backend.projectPath}}/src/main/java/**/service/
+       实现类: {{backend.projectPath}}/src/main/java/**/service/impl/
+     - Mapper 接口（继承 BaseMapper<T>）
+       搜索路径: {{backend.projectPath}}/src/main/java/**/mapper/
+     - Mapper XML（如有自定义 SQL）
+       搜索路径: {{backend.projectPath}}/src/main/resources/mapper/*.xml
+     - Entity 实体类（@TableName 注解）
+       搜索路径: {{backend.projectPath}}/src/main/java/**/entity/
+     - DTO 请求对象（@Valid 校验注解）
+       搜索路径: {{backend.projectPath}}/src/main/java/**/dto/
+     - VO 响应对象
+       搜索路径: {{backend.projectPath}}/src/main/java/**/vo/
+
+  c. 追踪调用链:
+     - 从 Controller 方法参数中提取 DTO 类名
+     - 从 Controller 注入的 Service 接口找到 ServiceImpl
+     - 从 ServiceImpl 注入的 Mapper 找到 Entity
+     - 从 Entity 的 @TableName 注解或 Mapper XML 的 SQL 提取表名
+
+  d. 记录每个文件的关键信息:
+     - Controller: 路由路径、HTTP 方法、方法签名、参数类型
+     - Service: 业务方法签名、事务注解(@Transactional)
+     - Mapper: 继承的 BaseMapper 泛型类型、自定义方法
+     - Entity: 字段列表、@TableName、@TableField 注解
+     - DTO: 字段列表、@Valid/@NotNull/@NotBlank 校验注解
+     - VO: 字段列表
+```

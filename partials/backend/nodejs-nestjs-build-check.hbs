@@ -1,0 +1,28 @@
+```yaml
+编译检查（Node.js NestJS）:
+  命令: cd {{backend.projectPath}} && npx tsc --noEmit
+  说明: TypeScript 类型检查，不生成输出文件
+
+  替代命令:
+    cd {{backend.projectPath}} && nest build（NestJS CLI 构建）
+
+  额外检查:
+    - ESLint: cd {{backend.projectPath}} && npx eslint "src/**/*.ts"
+    - 依赖检查: cd {{backend.projectPath}} && npm ls
+
+  检查项:
+    - TypeScript 语法和类型错误
+    - 装饰器使用错误
+    - 模块导入/导出配置
+    - DI 注入类型匹配
+    - Entity/DTO 定义问题
+    - class-validator 装饰器使用
+
+  常见编译错误及修复:
+    - "TS2304 Cannot find name 'xxx'": 缺少 import 或类型定义
+    - "TS2345 Argument of type 'xxx' is not assignable": 类型不匹配
+    - "TS2339 Property 'xxx' does not exist on type": 属性不存在
+    - "TS2307 Cannot find module 'xxx'": 模块未安装或路径错误
+    - "TS1240 Unable to resolve signature of property decorator": 装饰器配置错误
+    - "TS2554 Expected N arguments, but got M": 参数数量不匹配
+```

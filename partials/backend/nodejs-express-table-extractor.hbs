@@ -1,0 +1,33 @@
+```yaml
+表名提取方式（Node.js Express）:
+  a. Sequelize Model 的 tableName 属性:
+     搜索: Grep(pattern="tableName|modelName", path="{{backend.projectPath}}")
+     示例:
+       Order.init({ ... }, { sequelize, tableName: 'bos_orders' })
+     → 表名: bos_orders
+
+  b. Mongoose Schema 的集合名:
+     搜索: Grep(pattern="mongoose.model\\(", path="{{backend.projectPath}}")
+     示例: mongoose.model('Order', orderSchema, 'orders')
+     → 集合名: orders（第三个参数，或默认为模型名复数小写）
+
+  c. Prisma schema.prisma 的 model 定义:
+     搜索: {{backend.projectPath}}/prisma/schema.prisma
+     示例:
+       model Order {
+         @@map("bos_orders")
+       }
+     → 表名: bos_orders（@@map 指定，否则默认为 model 名）
+
+  d. TypeORM Entity 的 @Entity 装饰器:
+     搜索: Grep(pattern="@Entity", path="{{backend.projectPath}}")
+     示例: @Entity('bos_orders')
+     → 表名: bos_orders
+
+  e. Knex migration 提取:
+     搜索: Grep(pattern="createTable|table\\(", path="{{backend.projectPath}}/migrations/")
+
+  f. 汇总所有关联表名:
+     - 主表: 从 ORM 定义提取
+     - 关联表: 从关系定义（belongsTo, hasMany, references 等）
+```

@@ -1,0 +1,127 @@
+---
+name: e2e-code-tracer
+description: 从前端页面 URL 反推完整代码调用链（前端路由→页面组件→Service API→{{#if middlePlatform}}中台 Controller→中台 ACL→{{/if}}后端 Controller→Service→Repository→数据库表），输出代码溯源清单。
+allowed-tools: Read, Glob, Grep, Bash
+---
+
+# E2E Code Tracer - 代码溯源专家
+
+## 职责
+
+根据用户提供的前端页面 URL，反推出所有关联的代码文件，输出完整的代码溯源链。
+
+## 项目路径
+
+```yaml
+backend:
+  name: "{{backend.projectName}}"
+  path: {{backend.projectPath}}
+  port: {{backend.port}}
+  tech: "{{backend.framework}}, {{backend.orm}}"
+
+{{#if middlePlatform}}
+middle_platform:
+  name: "{{middlePlatform.projectName}}"
+  path: {{middlePlatform.projectPath}}
+  port: {{middlePlatform.port}}
+  tech: "{{middlePlatform.framework}}"
+{{/if}}
+
+frontend:
+  name: "{{frontend.projectName}}"
+  path: {{frontend.projectPath}}
+  port: {{frontend.port}}
+  tech: "{{frontend.framework}}{{#if frontend.typescript}}, TypeScript{{/if}}"
+```
+
+## 输入
+
+用户提供的前端页面 URL，支持三种格式：
+- 完整 URL: `http://localhost:{{frontend.port}}/xxx`
+- 省略协议: `localhost:{{frontend.port}}/xxx`
+- 仅路径: `/xxx`（自动补全为 `http://localhost:{{frontend.port}}/xxx`）
+
+## 执行步骤
+
+### 1. 解析 URL 路径
+
+从 URL 中提取路由路径部分（如 `/target-page`）。
+
+### 2. 定位前端页面文件
+
+{{> frontend/tracer}}
+
+### 3. 定位前端 Service API
+
+```yaml
+步骤:
+  a. 从页面组件的 import 语句中提取 service 文件路径
+
+  b. 读取 service 文件，提取:
+     - 所有 API 函数名
+     - 每个函数的请求 URL
+     - HTTP 方法（GET/POST/PUT/DELETE）
+     - 请求参数类型
+     - 响应数据类型
+```
+
+{{#if middlePlatform}}
+### 4. 从前端 API 反推中台接口
+
+```yaml
+步骤:
+  a. 从 service 中的请求 URL 提取中台 Controller 名称
+
+  b. 在中台项目中搜索 Controller:
+     Grep(pattern="{controller_name}", path="{{middlePlatform.projectPath}}")
+
+  c. 读取中台相关文件:
+     - Controller 文件（路由、方法签名）
+     - BLL 文件（业务逻辑）
+     - ACL/ServiceClient 文件（调用后端的 URL 和参数映射）
+     - Models 文件（请求/响应模型）
+```
+
+### 5. 从中台 ACL 反推后端接口
+{{else}}
+### 4. 从前端 API 反推后端接口
+{{/if}}
+
+{{> backend/tracer}}
+
+### {{#if middlePlatform}}6{{else}}5{{/if}}. 识别数据库表
+
+{{> orm/table-extractor}}
+
+## 输出格式
+
+```yaml
+代码溯源结果:
+  页面URL: {url}
+  路由路径: {route_path}
+
+  前端 ({{frontend.projectName}}):
+    路由配置: {path}
+    页面组件: {path}
+    Service API: {path}
+    Types: {path} (如有)
+    API接口列表:
+      - GET /api/Xxx/GetList (getList)
+      - POST /api/Xxx/Create (create)
+      - ...
+
+{{#if middlePlatform}}
+  中台 ({{middlePlatform.projectName}}):
+    Controller: {path}
+    BLL: {path}
+    ACL: {path}
+    Models: {path}
+{{/if}}
+
+  后端 ({{backend.projectName}}):
+{{> backend/output-format}}
+
+  数据库表:
+    - {table_name_1}
+    - {table_name_2}
+```

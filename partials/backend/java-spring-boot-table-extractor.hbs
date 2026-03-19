@@ -1,0 +1,22 @@
+```yaml
+表名提取方式（Java Spring Boot + MyBatis Plus）:
+  a. 从 Entity 的 @TableName 注解提取:
+     搜索: Grep(pattern="@TableName", path="{{backend.projectPath}}/src/main/java")
+     示例: @TableName("bos_orders") → 表名: bos_orders
+
+  b. 从 Mapper XML 中的 SQL 语句提取（如有自定义 SQL）:
+     搜索: Glob(pattern="{{backend.projectPath}}/src/main/resources/mapper/*.xml")
+     提取 <select>/<insert>/<update>/<delete> 标签中的 FROM/INTO/UPDATE 后的表名
+
+  c. 从 @TableField 注解提取字段映射:
+     示例: @TableField("order_no") → 数据库字段: order_no
+
+  d. 从 BaseMapper<T> 泛型推断默认表名:
+     如 Entity 没有 @TableName 注解，MyBatis Plus 默认将驼峰类名转为下划线表名
+     示例: BosOrder → bos_order
+
+  e. 汇总所有关联表名:
+     - 主表: 从 Entity @TableName 提取
+     - 关联表: 从 Mapper XML 的 JOIN 语句提取
+     - 子表: 从 Service 层关联查询中提取
+```

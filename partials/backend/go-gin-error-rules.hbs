@@ -1,0 +1,33 @@
+```yaml
+判断条件（满足任一即归因为后端 - Go Gin）:
+  - 后端返回 HTTP 5xx
+  - GORM 数据库错误（ErrRecordNotFound、唯一约束违反）
+  - SQL 语法错误或字段不存在
+  - 业务逻辑错误（状态流转不正确、计算错误）
+  - 数据库查询结果与预期不符
+  - 请求参数绑定/校验失败（binding tag）
+  - panic 导致的 500 错误
+
+常见异常类型:
+  - gorm.ErrRecordNotFound: 查询记录不存在
+  - gorm.ErrDuplicatedKey: 唯一键冲突
+  - gorm.ErrForeignKeyViolated: 外键约束违反
+  - gorm.ErrInvalidField: 无效字段
+  - gorm.ErrInvalidData: 无效数据
+  - sql.ErrNoRows: SQL 查询无结果
+  - validator.ValidationErrors: 参数校验失败（gin binding）
+  - json.UnmarshalTypeError: JSON 反序列化类型不匹配
+  - json.SyntaxError: JSON 格式错误
+  - strconv.ErrSyntax: 字符串转数值失败
+  - runtime error (panic): nil pointer dereference, index out of range
+  - context.DeadlineExceeded: 请求超时
+  - net.Error: 网络连接错误
+
+修复范围: {{backend.projectPath}}/ 下的 Go 文件
+编译验证: cd {{backend.projectPath}} && go build ./...
+
+服务重启提示:
+  - Go 代码修改后需要重新编译并重启服务
+  - 如使用 air 热重载: 自动重启
+  - 手动重启: cd {{backend.projectPath}} && go run main.go
+```

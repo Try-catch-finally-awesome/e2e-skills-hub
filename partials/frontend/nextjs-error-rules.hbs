@@ -1,0 +1,34 @@
+```yaml
+判断条件（满足任一即归因为前端 - Next.js）:
+  - 浏览器控制台有 JavaScript/TypeScript 运行时错误
+  - Next.js 服务端错误（Server Component 渲染失败）
+  - 页面元素未正确渲染
+  - 前端表单校验逻辑错误
+  - 路由配置错误（404 页面、空白页）
+  - API 请求未发出或 URL 拼接错误
+  - API Route handler 处理异常
+  - Server Actions 执行失败
+  - 请求参数字段名/类型与后端接口不匹配
+  - 响应数据解析错误
+  - UI 交互逻辑错误
+  - 缓存/revalidation 异常
+
+常见错误类型:
+  - TypeError: Cannot read properties of undefined/null: 数据未初始化或 fetch 结果结构不匹配
+  - Error: "use client" directive is required: Server Component 中使用了客户端功能
+  - Error: Event handlers cannot be passed to Client Component props: Server/Client 组件边界错误
+  - Error: Hydration failed: 服务端和客户端渲染结果不一致
+  - Error: Text content does not match server-rendered HTML: hydration 不匹配
+  - Error: Cannot access xxx before initialization: 模块初始化顺序问题
+  - NEXT_NOT_FOUND: notFound() 触发的 404
+  - NEXT_REDIRECT: redirect() 重定向
+  - Server Action Error: 'use server' 函数执行异常
+  - Error: Dynamic server usage: 静态页面中使用了动态 API（cookies/headers）
+  - Error: NEXT_REVALIDATE: 缓存 revalidation 失败
+  - fetch failed: Server Component 中的 fetch 请求失败
+  - API Route 500: route.ts handler 异常
+
+修复范围: {{frontend.projectPath}}/app/ 或 {{frontend.projectPath}}/src/ 下的文件
+编译验证: cd {{frontend.projectPath}} && npx next build
+           或 cd {{frontend.projectPath}} && npx tsc --noEmit
+```

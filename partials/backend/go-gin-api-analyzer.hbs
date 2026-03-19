@@ -1,0 +1,33 @@
+```yaml
+接口分析（Go Gin）:
+  a. 读取 Router 文件，提取路由配置:
+     - router.Group() 的路由分组前缀
+     - r.GET/POST/PUT/DELETE() 路由注册
+     - 中间件绑定: r.Use()
+     - 路径参数: :id, :name
+
+  b. 读取 Handler 函数，提取每个接口:
+     - 路径参数: c.Param("id")
+     - 查询参数: c.Query("page"), c.DefaultQuery("size", "10")
+     - 请求体绑定: c.ShouldBindJSON(&req), c.ShouldBind(&req)
+     - 表单参数: c.PostForm("field")
+     - 文件上传: c.FormFile("file")
+     - 响应: c.JSON(statusCode, response)
+
+  c. 读取 DTO/Request 结构体，提取校验规则:
+     搜索: Grep(pattern="binding:\"required|validate:\"", path="{{backend.projectPath}}")
+     提取每个字段的:
+     - 字段名和类型（string, int, float64 等）
+     - `binding:"required"` → 必填项
+     - `binding:"min=1,max=100"` → 数值范围
+     - `binding:"len=11"` → 固定长度
+     - `binding:"email"` → 邮箱格式
+     - `binding:"oneof=active inactive"` → 枚举值
+     - `json:"field_name"` → JSON 字段名映射
+     - 自定义校验器
+
+  d. 读取 Service 层，提取业务逻辑:
+     - 事务处理: db.Transaction(func(tx *gorm.DB) error { ... })
+     - 业务校验和错误返回
+     - 关联查询: Preload(), Joins()
+```

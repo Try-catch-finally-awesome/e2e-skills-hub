@@ -1,0 +1,30 @@
+```yaml
+判断条件（满足任一即归因为前端 - React）:
+  - 浏览器控制台有 JavaScript/TypeScript 运行时错误
+  - React 错误边界捕获的错误
+  - 页面元素未正确渲染（缺少按钮、表格列、表单字段）
+  - 前端表单校验逻辑错误
+  - 前端路由配置错误（404 页面、空白页）
+  - API 请求未发出（前端代码逻辑阻断）
+  - API 请求 URL 拼接错误
+  - 请求参数字段名/类型与后端接口不匹配
+  - 响应数据解析错误（前端取错字段名导致显示异常）
+  - UI 交互逻辑错误（按钮状态、弹窗显示/隐藏、loading 状态）
+  - React state 管理异常（Redux/Zustand/Context）
+
+常见错误类型:
+  - TypeError: Cannot read properties of undefined/null: 数据未初始化或接口返回结构不匹配
+  - ReferenceError: xxx is not defined: 变量未声明或 import 遗漏
+  - Error: Rendered more hooks than during the previous render: Hook 调用顺序不一致
+  - Error: Invalid hook call: Hook 在非函数组件中调用
+  - Warning: Each child in a list should have a unique "key" prop: 列表缺少 key
+  - Warning: Can't perform a React state update on an unmounted component: 组件卸载后更新状态
+  - Error: Minified React error #xxx: 生产环境 React 错误
+  - Uncaught Error: Invariant Violation: React 内部不变量违反
+  - Error: Objects are not valid as a React child: 错误的子元素类型
+  - ChunkLoadError: 代码分割加载失败
+  - React Query/SWR 缓存异常
+
+修复范围: {{frontend.projectPath}}/src/ 下的文件
+编译验证: cd {{frontend.projectPath}} && npx tsc --noEmit
+```

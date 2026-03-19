@@ -1,0 +1,33 @@
+```yaml
+接口分析（Python FastAPI）:
+  a. 读取 Router 文件，提取路由配置:
+     - @router.get/post/put/delete() 的路径和参数
+     - router = APIRouter(prefix="/api/xxx", tags=["xxx"])
+     - 依赖注入: Depends() 中的认证、权限、数据库会话
+
+  b. 读取 Endpoint 函数，提取每个接口:
+     - 函数签名: 参数名、参数类型标注
+     - 路径参数: 如 item_id: int
+     - 查询参数: 如 skip: int = 0, limit: int = 100
+     - 请求体: 如 item: ItemCreate（Pydantic Model）
+     - 响应模型: response_model=ItemResponse
+     - 状态码: status_code=201
+
+  c. 读取 Pydantic Schema/Model，提取校验规则:
+     搜索: Grep(pattern="class.*BaseModel|class.*Schema", path="{{backend.projectPath}}")
+     提取每个字段的:
+     - 字段名和类型（str, int, float, Optional 等）
+     - Field(min_length=, max_length=) → 长度限制
+     - Field(ge=, le=, gt=, lt=) → 数值范围
+     - Field(regex=) → 正则校验
+     - Field(...) (Ellipsis) → 必填项
+     - Field(default=) → 默认值
+     - @validator / @field_validator → 自定义校验器
+     - @root_validator / @model_validator → 对象级校验
+     - Config.schema_extra → 示例数据
+
+  d. 读取 Service/CRUD 层，提取业务逻辑:
+     - 数据库操作: session.query() / session.add() / session.delete()
+     - 事务管理: session.commit() / session.rollback()
+     - 业务校验和异常: raise HTTPException(status_code=, detail=)
+```

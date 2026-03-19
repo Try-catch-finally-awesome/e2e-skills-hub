@@ -1,0 +1,31 @@
+```yaml
+表名提取方式（Node.js NestJS + TypeORM）:
+  a. 从 Entity 的 @Entity() 装饰器提取:
+     搜索: Grep(pattern="@Entity\\(", path="{{backend.projectPath}}/src")
+     示例:
+       @Entity('bos_orders')
+       export class Order { ... }
+     → 表名: bos_orders
+
+  b. 如 @Entity() 无参数，从类名推断:
+     TypeORM 默认将类名转为蛇形小写
+     示例: OrderItem → order_item
+
+  c. 从 @Column() 装饰器提取字段映射:
+     示例: @Column({ name: 'order_no' }) → 数据库字段: order_no
+
+  d. 从 @JoinColumn() 和关系装饰器提取关联表:
+     示例:
+       @ManyToOne(() => Supplier)
+       @JoinColumn({ name: 'supplier_id' })
+     → 关联表: supplier 表
+
+  e. 从 Migration 文件确认（如有）:
+     搜索: Glob(pattern="{{backend.projectPath}}/src/migrations/*.ts")
+     查看 queryRunner.createTable() 中的表名
+
+  f. 汇总所有关联表名:
+     - 主表: 从 @Entity() 参数或类名推断
+     - 关联表: 从 @OneToMany/@ManyToOne/@ManyToMany 关系装饰器
+     - 中间表: 从 @JoinTable() 配置
+```

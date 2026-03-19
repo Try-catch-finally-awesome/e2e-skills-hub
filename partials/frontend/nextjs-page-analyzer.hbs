@@ -1,0 +1,52 @@
+```yaml
+页面功能分析（Next.js 组件）:
+  a. 读取页面组件的 JSX/TSX 返回内容，提取:
+     表格:
+       - 组件名: {{frontend.uiLibrary}} 的表格组件
+       - 列定义: columns 数组
+       - 操作列: 编辑/删除/详情 按钮
+       - 选择列: rowSelection
+       - 分页: 客户端分页或服务端分页（searchParams）
+
+     查询表单:
+       - 搜索条件字段
+       - URL searchParams 参数驱动的查询（Server Components 模式）
+       - 客户端状态驱动的查询（Client Components 模式）
+
+     操作按钮:
+       - 新增按钮
+       - 批量删除按钮
+       - 导入/导出按钮
+
+     弹窗/表单:
+       - 新增/编辑弹窗（Modal / Dialog）
+       - 表单字段
+       - Server Actions 表单（<form action={serverAction}>）
+       - 客户端表单（onSubmit handler）
+
+  b. 分析数据获取模式:
+     Server Components:
+       - async 组件直接 fetch
+       - searchParams / params 参数
+       - Suspense 边界
+     Client Components:
+       - useEffect + fetch / axios
+       - React Query / SWR
+       - Server Actions 调用（useFormState / useFormStatus）
+
+  c. 分析表单校验规则:
+     服务端校验（Server Actions）:
+       - Zod schema 校验: z.object({ ... }).safeParse()
+       - 自定义校验函数
+     客户端校验:
+       - React Hook Form + Zod/Yup
+       - {{frontend.uiLibrary}} 内置表单校验
+       - HTML5 原生校验属性（required, pattern, min, max）
+
+  d. 分析路由特性:
+     - 并行路由（@folder）
+     - 拦截路由（(.)folder）
+     - 路由组（(group)）
+     - 动态路由（[id]）
+     - catch-all 路由（[...slug]）
+```

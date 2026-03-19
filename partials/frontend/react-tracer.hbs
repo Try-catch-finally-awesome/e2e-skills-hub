@@ -1,0 +1,35 @@
+```yaml
+搜索顺序:
+  a. 在前端路由配置中搜索路径关键词:
+     Grep(pattern="{route_keyword}", path="{{frontend.projectPath}}/src")
+     目标文件: App.tsx / routes.tsx / router/index.tsx
+     匹配: path: '/xxx' 或 <Route path="/xxx" 路由配置
+
+  b. 从路由配置找到页面组件:
+     如: React.lazy(() => import('./pages/xxx/index'))
+     或: element: <XxxPage />
+     或: component: XxxPage（从 import 追踪）
+     → 页面组件: src/pages/xxx/index.tsx
+
+  c. 读取页面组件，记录:
+     - 文件路径
+     - 所有 import 的 hook / service / API 文件
+     - 引入的子组件
+     - 使用的 UI 组件（{{frontend.uiLibrary}} 组件名）
+     - 页面包含的功能:
+       - 表格组件（如 Table / ProTable / DataGrid）
+       - 表单组件（如 Form / ProForm）
+       - 按钮（新增、编辑、删除、导出等）
+       - 模态框/抽屉（Modal / Drawer / Dialog）
+       - 搜索/查询区域
+       - 分页组件
+
+  d. 分析 React 组件结构:
+     - useState() 声明的状态
+     - useEffect() 副作用（数据加载等）
+     - useMemo() / useCallback() 优化
+     - useRef() 引用
+     - 自定义 Hook 调用（useXxx）
+     - Context 使用（useContext）
+     - Redux/Zustand 状态管理 Hook
+```

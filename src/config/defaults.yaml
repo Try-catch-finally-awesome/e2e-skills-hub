@@ -1,0 +1,65 @@
+# ============================================================
+# e2e-skills-hub 配置文件
+# ============================================================
+
+# 存储策略
+storage:
+  location: "project"
+  projectPath: ".claude/skills/e2e"
+  userPath: "~/.claude/skills/e2e"
+
+# 技术栈检测
+detection:
+  autoDetect: true
+  backend:
+    language: ""
+    framework: ""
+    orm: ""
+    projectPath: ""
+    port: 8080
+    buildCommand: ""
+    testCommand: ""
+  frontend:
+    framework: ""
+    projectPath: ""
+    port: 5173
+    packageManager: ""
+
+# 测试执行
+execution:
+  maxFixRounds: 20
+  maxSingleFix: 3
+  testDataPrefix: "TEST_"
+  screenshotOnFailure: true
+  cleanTestData: true
+
+# MCP 工具
+mcp:
+  database:
+    name: ""
+    database: ""
+  playwright:
+    name: "playwright"
+    browser: "chromium"
+
+# 测试账号（可选）
+testAccount:
+  username: ""
+  password: ""
+  loginType: ""
+
+# 报告输出
+report:
+  outputPath: "doc/测试报告"
+  format: "markdown"
+  includeScreenshots: true
+
+# 质量门禁
+quality:
+  passScore: 90
+  scoreWeights:
+    pageLoad: 15
+    crudCorrectness: 30
+    businessFlow: 25
+    exceptionHandling: 15
+    dataConsistency: 15

@@ -1,0 +1,35 @@
+```yaml
+步骤:
+  a. 从页面组件的 import 语句中提取 service/API 文件路径:
+     如: import { getList, create } from '@/api/xxx'
+     或: import { useXxxApi } from '@/composables/useXxxApi'
+     → Service: src/api/xxx.ts 或 src/composables/useXxxApi.ts
+
+  b. 读取 service/API 文件，提取:
+     - 所有 API 函数名（导出的函数）
+     - 每个函数的请求 URL
+       如: axios.get('/api/xxx/list') 或 request.post('/api/xxx/create')
+     - HTTP 方法（GET/POST/PUT/DELETE）
+     - 请求参数类型（TypeScript 泛型或参数定义）
+     - 响应数据类型
+
+  c. 检查 axios/request 实例配置:
+     搜索: Glob(pattern="{{frontend.projectPath}}/src/utils/request.ts")
+     或: Glob(pattern="{{frontend.projectPath}}/src/utils/http.ts")
+     提取:
+     - baseURL 配置（API 前缀）
+     - 请求拦截器（Token 注入等）
+     - 响应拦截器（错误处理等）
+
+  d. 如使用 composable 模式:
+     搜索: Glob(pattern="{{frontend.projectPath}}/src/composables/use*.ts")
+     提取:
+     - composable 函数中封装的 API 调用
+     - 返回的 ref/reactive 数据
+     - loading/error 状态管理
+
+  e. 检查 TypeScript 类型定义:
+     搜索: Glob(pattern="{{frontend.projectPath}}/src/types/*.ts")
+     或: 从 API 文件的 import 追踪类型定义文件
+     提取: 接口/类型定义（请求参数、响应数据结构）
+```

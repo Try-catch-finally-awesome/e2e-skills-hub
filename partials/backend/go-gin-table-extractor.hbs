@@ -1,0 +1,26 @@
+```yaml
+表名提取方式（Go Gin + GORM）:
+  a. 从 Model 的 TableName() 方法提取:
+     搜索: Grep(pattern="func.*TableName", path="{{backend.projectPath}}")
+     示例:
+       func (Order) TableName() string {
+           return "bos_orders"
+       }
+     → 表名: bos_orders
+
+  b. 从 GORM 默认规则推断:
+     如未定义 TableName() 方法，GORM 默认将结构体名转为蛇形复数
+     示例: Order → orders, OrderItem → order_items
+
+  c. 从 gorm tag 提取字段映射:
+     示例: `gorm:"column:order_no"` → 数据库字段: order_no
+
+  d. 从 GORM 查询语句提取关联表:
+     搜索: Grep(pattern="Table\\(|Joins\\(|Preload\\(", path="{{backend.projectPath}}")
+     示例: db.Table("orders").Joins("JOIN order_items ON ...")
+
+  e. 汇总所有关联表名:
+     - 主表: 从 TableName() 方法或默认规则
+     - 关联表: 从 GORM 关系定义（BelongsTo, HasMany, ManyToMany）
+     - 中间表: 从 many2many tag 提取
+```

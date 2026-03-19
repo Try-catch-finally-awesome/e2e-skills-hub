@@ -1,0 +1,25 @@
+```yaml
+编译检查（ASP.NET Core）:
+  命令: dotnet build "{{backend.projectPath}}"
+  说明: 使用 dotnet CLI 编译项目，检测语法和类型错误
+
+  额外检查:
+    - 解决方案级编译: dotnet build "{{backend.projectPath}}/*.sln"
+    - 格式检查: dotnet format "{{backend.projectPath}}" --verify-no-changes
+
+  检查项:
+    - C# 语法错误
+    - 类型不匹配
+    - 缺失的 using 引用
+    - NuGet 包引用问题
+    - Entity Framework 配置错误
+    - DI 注册遗漏（运行时才会报错，编译期不可检测）
+
+  常见编译错误及修复:
+    - "CS0246 The type or namespace name 'xxx' could not be found": 缺少 using 或 NuGet 包
+    - "CS0029 Cannot implicitly convert type": 类型转换错误
+    - "CS0103 The name 'xxx' does not exist": 未定义的变量/方法
+    - "CS0535 'xxx' does not implement interface member": 接口方法未实现
+    - "CS0161 not all code paths return a value": 方法缺少返回值
+    - "CS1503 Argument cannot convert from": 参数类型不匹配
+```

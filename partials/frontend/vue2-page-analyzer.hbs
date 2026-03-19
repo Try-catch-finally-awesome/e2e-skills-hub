@@ -1,0 +1,44 @@
+```yaml
+页面功能分析（Vue 2 SFC + Options API）:
+  a. 读取页面组件的 <template> 部分，提取:
+     表格:
+       - 组件名: {{frontend.uiLibrary}} 的表格组件
+       - 列定义: <el-table-column> / <a-table :columns="columns"> 等
+       - 操作列: 编辑/删除/详情 按钮（slot="operation"）
+       - 选择列: type="selection" / type="checkbox"
+       - 排序: sortable 属性
+       - 自定义渲染: slot-scope / #default
+
+     查询表单:
+       - 搜索条件字段: el-input / el-select / el-date-picker 等
+       - 查询按钮和重置按钮
+       - 高级搜索/折叠展开
+
+     操作按钮:
+       - 新增按钮
+       - 批量删除按钮
+       - 导入/导出按钮
+       - 其他业务操作按钮
+
+     弹窗/表单:
+       - 新增/编辑弹窗（ElDialog / AModal）
+       - 表单字段列表和组件类型
+       - 表单校验规则（:rules 属性绑定）
+       - 提交/取消按钮（@click 事件）
+
+  b. 读取 <script> 部分（Options API），提取:
+     - data() 中的表单校验规则定义
+     - methods 中的接口调用方法
+     - computed 中的数据处理
+     - created/mounted 中的初始化逻辑
+     - watch 中的数据监听
+
+  c. 分析表单校验规则:
+     搜索 data() 中的 rules 对象:
+     - required: true → 必填项
+     - type: 'string'/'number'/'email'/'array' → 类型校验
+     - min/max → 长度限制
+     - pattern → 正则校验
+     - validator → 自定义校验函数
+     - trigger: 'blur'/'change' → 校验触发时机
+```

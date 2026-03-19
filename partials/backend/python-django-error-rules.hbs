@@ -1,0 +1,32 @@
+```yaml
+判断条件（满足任一即归因为后端 - Python Django）:
+  - 后端返回 HTTP 5xx
+  - Django ORM 异常（FieldError、IntegrityError、OperationalError）
+  - Serializer 校验失败（ValidationError）
+  - 业务逻辑错误（状态流转不正确、计算错误）
+  - Migration 不一致（表结构与代码不匹配）
+  - 权限校验异常（PermissionDenied）
+
+常见异常类型:
+  - FieldError: 查询中使用了不存在的字段名
+  - IntegrityError: 数据库约束违反（唯一约束、外键约束、非空约束）
+  - OperationalError: 数据库操作错误（表不存在、连接失败）
+  - ValidationError: Serializer 校验失败（字段格式、必填项、自定义校验）
+  - ObjectDoesNotExist / DoesNotExist: 查询对象不存在
+  - MultipleObjectsReturned: get() 返回多条记录
+  - PermissionDenied: 权限不足
+  - NotAuthenticated: 未认证
+  - ParseError: 请求数据解析失败（JSON 格式错误）
+  - Http404: 资源不存在
+  - ProgrammingError: SQL 编程错误（字段类型不匹配等）
+  - DataError: 数据值超出范围或格式错误
+  - ImproperlyConfigured: Django 配置错误（settings.py）
+
+修复范围: {{backend.projectPath}}/ 下的 Python 文件
+编译验证: cd {{backend.projectPath}} && python manage.py check
+
+服务重启提示:
+  - Python 代码修改后 Django 开发服务器通常自动重载
+  - 如未自动重载: cd {{backend.projectPath}} && python manage.py runserver
+  - Migration 修改需执行: python manage.py migrate
+```

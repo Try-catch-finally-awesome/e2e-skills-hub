@@ -1,0 +1,33 @@
+```yaml
+接口分析（Java Spring Boot）:
+  a. 读取 Controller 文件，提取每个接口:
+     - 路由: @RequestMapping/@GetMapping/@PostMapping/@PutMapping/@DeleteMapping 的值
+     - HTTP 方法: GET/POST/PUT/DELETE
+     - 方法签名: 方法名、参数列表、返回值类型
+     - 路径变量: @PathVariable 注解的参数
+     - 查询参数: @RequestParam 注解的参数
+     - 请求体: @RequestBody 注解的 DTO 类型
+
+  b. 读取 DTO 文件，提取校验规则:
+     搜索: Grep(pattern="@NotNull|@NotBlank|@NotEmpty|@Size|@Min|@Max|@Pattern|@Valid|@Email", path="{{backend.projectPath}}/src/main/java/**/dto/")
+     提取每个字段的:
+     - 字段名和类型
+     - @NotNull / @NotBlank / @NotEmpty → 必填项
+     - @Size(min=, max=) → 长度限制
+     - @Min / @Max → 数值范围
+     - @Pattern(regexp=) → 格式校验
+     - @Email → 邮箱格式
+     - @DecimalDigits → 小数位数
+     - 自定义校验注解
+
+  c. 读取 Service 层，提取业务约束:
+     - @Transactional 事务边界
+     - 条件判断中的业务规则（如状态限制、数量校验）
+     - 抛出的业务异常类型和消息
+     - 关联查询/更新逻辑
+
+  d. 读取 VO 文件，提取响应结构:
+     - 返回字段列表和类型
+     - 嵌套对象结构
+     - 分页包装（如 PageResult<T>）
+```

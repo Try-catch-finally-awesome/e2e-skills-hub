@@ -1,0 +1,30 @@
+```yaml
+判断条件（满足任一即归因为后端 - Python FastAPI）:
+  - 后端返回 HTTP 5xx（Internal Server Error）
+  - SQLAlchemy 异常（IntegrityError、OperationalError、ProgrammingError）
+  - Pydantic 校验失败（ValidationError，返回 HTTP 422）
+  - 业务逻辑错误（状态流转不正确、计算错误）
+  - 数据库查询结果与预期不符
+  - 依赖注入失败（Depends() 中的函数异常）
+
+常见异常类型:
+  - RequestValidationError: 请求参数校验失败（Pydantic，HTTP 422）
+  - HTTPException: 手动抛出的业务异常（各种状态码）
+  - IntegrityError: 数据库约束违反（唯一约束、外键约束）
+  - OperationalError: 数据库操作失败（连接超时、表不存在）
+  - ProgrammingError: SQL 编程错误
+  - NoResultFound: 查询无结果但使用了 .one()
+  - MultipleResultsFound: 查询返回多条但使用了 .one()
+  - AttributeError: 对象属性访问错误
+  - TypeError: 类型不匹配
+  - ValueError: 值校验错误
+  - JSONDecodeError: 请求体 JSON 解析失败
+  - StarletteHTTPException: Starlette 层 HTTP 异常
+
+修复范围: {{backend.projectPath}}/ 下的 Python 文件
+编译验证: cd {{backend.projectPath}} && python -m py_compile {modified_file}
+
+服务重启提示:
+  - FastAPI 开发模式（uvicorn --reload）通常自动重载
+  - 如未自动重载: cd {{backend.projectPath}} && uvicorn main:app --reload
+```

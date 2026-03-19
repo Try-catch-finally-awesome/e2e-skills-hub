@@ -1,0 +1,33 @@
+```yaml
+判断条件（满足任一即归因为前端 - Angular）:
+  - 浏览器控制台有 JavaScript/TypeScript 运行时错误
+  - Angular 错误: ERROR Error / NullInjectorError / ExpressionChangedAfterItHasBeenChecked
+  - 页面元素未正确渲染
+  - 前端表单校验逻辑错误（Reactive Forms / Template-driven Forms）
+  - 前端路由配置错误（404 页面、空白页、路由守卫阻断）
+  - API 请求未发出（HttpClient 调用异常或 subscribe 遗漏）
+  - API 请求 URL 拼接错误
+  - 请求参数字段名/类型与后端接口不匹配
+  - 响应数据解析错误
+  - UI 交互逻辑错误
+  - NgRx 状态管理异常
+
+常见错误类型:
+  - NullInjectorError: No provider for XxxService: DI 注入失败，服务未在 Module 中提供
+  - ExpressionChangedAfterItHasBeenCheckedError: 变更检测后表达式值又变了
+  - TypeError: Cannot read properties of undefined: 数据未初始化或 Observable 未订阅
+  - Error: NG0100: ExpressionChanged 错误
+  - Error: NG0200: Circular dependency 循环依赖
+  - Error: NG0300: 多个组件匹配同一选择器
+  - Error: NG0301: 在模板中使用的管道/指令/组件未声明
+  - HttpErrorResponse: HTTP 请求错误（后端返回错误状态码）
+  - RxJS Error: 未处理的 Observable 错误
+  - Error: formGroup expects a FormGroup instance: 表单组绑定错误
+  - Error: Cannot find control with name 'xxx': FormControl 名称不匹配
+  - Error: MatDialogRef was not injected: Dialog 引用注入失败
+  - Zone.js Uncaught Error: 未捕获的异步错误
+
+修复范围: {{frontend.projectPath}}/src/ 下的文件
+编译验证: cd {{frontend.projectPath}} && npx ng build --configuration development
+           或 cd {{frontend.projectPath}} && npx tsc --noEmit
+```

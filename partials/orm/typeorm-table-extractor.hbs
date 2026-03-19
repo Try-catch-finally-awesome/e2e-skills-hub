@@ -1,0 +1,46 @@
+```yaml
+表名提取方式（TypeORM）:
+  a. 从 @Entity() 装饰器提取:
+     搜索: Grep(pattern="@Entity\\(", path="{{backend.projectPath}}/src")
+     示例:
+       @Entity('bos_orders')
+       export class Order { ... }
+     → 表名: bos_orders
+
+     或无参数:
+       @Entity()
+       export class Order { ... }
+     → TypeORM 默认: 类名转蛇形小写 → order
+
+  b. 从 @Column() 装饰器提取字段映射:
+     搜索: Grep(pattern="@Column\\(", path="{{backend.projectPath}}/src")
+     示例: @Column({ name: 'order_no', type: 'varchar', length: 50 })
+
+  c. 从关系装饰器提取关联表:
+     搜索: Grep(pattern="@ManyToOne|@OneToMany|@ManyToMany|@OneToOne|@JoinColumn", path="{{backend.projectPath}}/src")
+     示例:
+       @ManyToOne(() => Supplier)
+       @JoinColumn({ name: 'supplier_id' })
+       supplier: Supplier;
+     → 关联表: Supplier Entity 对应的表名
+
+  d. 从 @JoinTable() 提取多对多中间表:
+     示例:
+       @ManyToMany(() => Tag)
+       @JoinTable({ name: 'order_tags' })
+       tags: Tag[];
+     → 中间表: order_tags
+
+  e. 从 TypeORM 命名策略确认:
+     检查 DataSource 配置中的 namingStrategy:
+     默认: DefaultNamingStrategy（类名转蛇形小写）
+
+  f. 从 Migration 文件确认:
+     搜索: Glob(pattern="{{backend.projectPath}}/src/migrations/*.ts")
+     查看 queryRunner.createTable() 中的表名
+
+  g. 汇总所有关联表名:
+     - 主表: 从 @Entity() 参数或默认命名
+     - 关联表: 从 @ManyToOne/@OneToMany/@OneToOne 引用的 Entity
+     - 中间表: 从 @JoinTable() 配置或 @ManyToMany 自动生成
+```

@@ -1,0 +1,40 @@
+```yaml
+搜索顺序:
+  a. 在后端项目中搜索 Router/Handler:
+     Grep(pattern="{api_keyword}", path="{{backend.projectPath}}")
+     重点搜索: **/router/ 或 **/handler/ 或 main.go
+     匹配: router.Group() / router.GET() / router.POST() 等路由注册
+
+  b. 读取后端相关文件（Go Gin 分层结构）:
+     - Router 路由注册文件
+       搜索路径: {{backend.projectPath}}/**/router/ 或 main.go
+       提取: r.Group()、r.GET/POST/PUT/DELETE() 路由定义
+     - Handler/Controller（请求处理函数）
+       搜索路径: {{backend.projectPath}}/**/handler/ 或 **/controller/
+       提取: c.JSON()、c.Bind()、c.Query()、c.Param() 调用
+     - Service 层（业务逻辑）
+       搜索路径: {{backend.projectPath}}/**/service/
+       提取: 业务方法签名、错误处理
+     - Repository/DAO 层（数据访问）
+       搜索路径: {{backend.projectPath}}/**/repository/ 或 **/dao/
+       提取: 数据库操作方法（GORM 查询）
+     - Model/Entity（数据模型）
+       搜索路径: {{backend.projectPath}}/**/model/ 或 **/entity/
+       提取: 结构体定义、gorm tag、json tag
+     - DTO/Request/Response（请求/响应结构体）
+       搜索路径: {{backend.projectPath}}/**/dto/ 或 **/request/ 或 **/response/
+
+  c. 追踪调用链:
+     - 从 main.go 或 router 文件找到路由分组和 handler 函数
+     - 从 handler 函数中找到调用的 service 方法
+     - 从 service 方法中找到调用的 repository/dao 方法
+     - 从 repository 中找到使用的 model 结构体
+     - 从 model 结构体的 TableName() 方法或 gorm tag 提取表名
+
+  d. 记录每个文件的关键信息:
+     - Router: 路由分组、中间件(middleware)
+     - Handler: URL 路径、HTTP 方法、参数绑定方式
+     - Service: 方法签名、事务处理（db.Transaction）
+     - Repository: GORM 查询方法（Find, Create, Update, Delete）
+     - Model: 结构体字段、gorm tag、json tag、TableName() 方法
+```

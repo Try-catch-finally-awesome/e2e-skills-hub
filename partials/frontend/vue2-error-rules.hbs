@@ -1,0 +1,31 @@
+```yaml
+判断条件（满足任一即归因为前端 - Vue 2）:
+  - 浏览器控制台有 JavaScript 运行时错误
+  - Vue 警告/错误: [Vue warn]、Error in render / mounted / created
+  - 页面元素未正确渲染（缺少按钮、表格列、表单字段）
+  - 前端表单校验逻辑错误
+  - 前端路由配置错误（404 页面、空白页、路由守卫阻断）
+  - API 请求未发出（前端代码逻辑阻断）
+  - API 请求 URL 拼接错误
+  - 请求参数字段名/类型与后端接口不匹配
+  - 响应数据解析错误
+  - UI 交互逻辑错误（按钮状态、弹窗显示/隐藏）
+  - Vuex 状态管理异常
+
+常见错误类型:
+  - TypeError: Cannot read property 'xxx' of undefined: 数据未正确初始化或响应结构不匹配
+  - ReferenceError: xxx is not defined: 变量未声明或 import 遗漏
+  - [Vue warn]: Property or method "xxx" is not defined on the instance: data/methods 中未定义
+  - [Vue warn]: Invalid prop: type check failed: 组件 prop 类型不匹配
+  - [Vue warn]: Unknown custom element: 组件未注册
+  - [Vue warn]: Error in render: data 中数据类型错误
+  - [Vue warn]: Avoid mutating a prop directly: 直接修改 prop
+  - NavigationDuplicated: 路由重复导航（vue-router 3.x）
+  - ChunkLoadError: 路由懒加载失败
+  - Vuex mutation/action 错误: 状态管理操作异常
+  - this.$refs.xxx 为 undefined: 组件引用时机错误
+
+修复范围: {{frontend.projectPath}}/src/ 下的文件
+编译验证: cd {{frontend.projectPath}} && npx vue-cli-service build --no-clean（Vue CLI 项目）
+           或 cd {{frontend.projectPath}} && npx webpack --mode development（Webpack 项目）
+```

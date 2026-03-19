@@ -1,0 +1,15 @@
+  3. 检查后端服务:
+     {{#ifEq backend.language "java"}}
+     curl {{backend.healthCheck}} 或 curl http://localhost:{{backend.port}}/actuator/health
+     {{else ifEq backend.language "python"}}
+     curl http://localhost:{{backend.port}}/api/health 或 curl http://localhost:{{backend.port}}/
+     {{else ifEq backend.language "go"}}
+     curl http://localhost:{{backend.port}}/health 或 curl http://localhost:{{backend.port}}/ping
+     {{else ifEq backend.language "dotnet"}}
+     curl http://localhost:{{backend.port}}/health
+     {{else}}
+     curl http://localhost:{{backend.port}}/
+     {{/ifEq}}
+{{#if mcp.database}}
+  4. 检查数据库: {{mcp.database.name}} MCP 执行 SELECT 1
+{{/if}}

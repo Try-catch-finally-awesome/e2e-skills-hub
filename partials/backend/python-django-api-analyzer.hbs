@@ -1,0 +1,33 @@
+```yaml
+接口分析（Python Django / Django REST Framework）:
+  a. 读取 urls.py，提取路由配置:
+     - path() / re_path() 的 URL 模式和视图函数/类
+     - router.register() 注册的 ViewSet 和 basename
+     - URL 路径参数（如 <int:pk>、<slug:slug>）
+
+  b. 读取 View/ViewSet，提取每个接口:
+     - ModelViewSet 自动提供: list / create / retrieve / update / partial_update / destroy
+     - 自定义 @action 装饰器标记的额外接口
+     - 权限类: permission_classes
+     - 认证类: authentication_classes
+     - 分页类: pagination_class
+     - 过滤后端: filter_backends
+
+  c. 读取 Serializer，提取校验规则:
+     搜索: Grep(pattern="class.*Serializer", path="{{backend.projectPath}}")
+     提取每个字段的:
+     - 字段名和类型（CharField, IntegerField, DecimalField 等）
+     - required=True/False → 是否必填
+     - max_length / min_length → 长度限制
+     - min_value / max_value → 数值范围
+     - validators → 自定义校验器
+     - read_only / write_only → 读写属性
+     - validate_xxx() 方法 → 字段级校验
+     - validate() 方法 → 对象级校验
+
+  d. 读取 Filter，提取查询参数:
+     - filterset_fields: 简单等值过滤
+     - FilterSet 中的字段: CharFilter / NumberFilter / DateFilter 等
+     - search_fields: 搜索字段
+     - ordering_fields: 排序字段
+```

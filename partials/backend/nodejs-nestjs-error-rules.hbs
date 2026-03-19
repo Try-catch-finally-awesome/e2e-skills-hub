@@ -1,0 +1,33 @@
+```yaml
+判断条件（满足任一即归因为后端 - Node.js NestJS）:
+  - 后端返回 HTTP 5xx
+  - TypeORM 数据库异常（QueryFailedError、EntityNotFoundError）
+  - class-validator 校验失败（返回 HTTP 400 + 校验错误数组）
+  - 业务逻辑错误（状态流转不正确、计算错误）
+  - 数据库查询结果与预期不符
+  - DI 容器解析失败（Nest 模块配置错误）
+  - Guard/Interceptor/Pipe 处理异常
+
+常见异常类型:
+  - HttpException / HttpStatus: NestJS 内置 HTTP 异常（BadRequest/NotFound/Forbidden 等）
+  - QueryFailedError (TypeORM): SQL 执行失败（语法错误、约束违反）
+  - EntityNotFoundError (TypeORM): 查询实体不存在
+  - CannotCreateEntityIdMapError (TypeORM): 实体 ID 映射错误
+  - BadRequestException: 请求参数错误（class-validator 校验失败触发）
+  - NotFoundException: 资源不存在
+  - ForbiddenException: 权限不足
+  - UnauthorizedException: 未认证
+  - ConflictException: 数据冲突（唯一约束违反）
+  - InternalServerErrorException: 服务器内部错误
+  - TypeError: 类型错误（运行时）
+  - ValidationError (class-validator): 参数校验失败
+  - Error: ECONNREFUSED: 数据库连接失败
+  - Nest Module Resolution Error: 模块依赖解析失败
+
+修复范围: {{backend.projectPath}}/src/ 下的 TypeScript 文件
+编译验证: cd {{backend.projectPath}} && npx tsc --noEmit
+
+服务重启提示:
+  - NestJS 开发模式（nest start --watch）通常自动重启
+  - 手动重启: cd {{backend.projectPath}} && npm run start:dev
+```

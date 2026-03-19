@@ -1,0 +1,38 @@
+```yaml
+搜索顺序:
+  a. 在后端项目中搜索 Router/Route:
+     Grep(pattern="{api_keyword}", path="{{backend.projectPath}}")
+     重点搜索: **/routes/ 或 app.js / index.js
+     匹配: router.get() / router.post() / app.use() 路由注册
+
+  b. 读取后端相关文件（Express 分层结构）:
+     - Routes 路由定义文件
+       搜索路径: {{backend.projectPath}}/routes/ 或 {{backend.projectPath}}/src/routes/
+       提取: router.get/post/put/delete() 路由、中间件
+     - Controllers 控制器（请求处理函数）
+       搜索路径: {{backend.projectPath}}/controllers/ 或 {{backend.projectPath}}/src/controllers/
+       提取: req.body / req.params / req.query 参数提取、res.json() 响应
+     - Services 服务层（业务逻辑）
+       搜索路径: {{backend.projectPath}}/services/ 或 {{backend.projectPath}}/src/services/
+       提取: 业务方法、数据库操作
+     - Models 数据模型
+       搜索路径: {{backend.projectPath}}/models/ 或 {{backend.projectPath}}/src/models/
+       提取: Mongoose Schema / Sequelize Model / Prisma Model 定义
+     - Middleware 中间件（校验、认证等）
+       搜索路径: {{backend.projectPath}}/middleware/ 或 {{backend.projectPath}}/src/middleware/
+     - Validators 校验器（如有，express-validator / Joi）
+       搜索路径: {{backend.projectPath}}/validators/ 或 {{backend.projectPath}}/src/validators/
+
+  c. 追踪调用链:
+     - 从 app.js/index.js 的 app.use() 找到路由模块
+     - 从路由文件的 router.get/post() 找到 controller 函数
+     - 从 controller 中找到调用的 service 方法
+     - 从 service 中找到使用的 model
+     - 从 model 定义提取表名/集合名
+
+  d. 记录每个文件的关键信息:
+     - Route: URL 路径、HTTP 方法、中间件链
+     - Controller: 参数提取方式、响应格式
+     - Service: 业务方法、事务处理
+     - Model: Schema 定义、字段类型、校验规则
+```

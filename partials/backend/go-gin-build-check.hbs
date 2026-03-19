@@ -1,0 +1,26 @@
+```yaml
+编译检查（Go Gin）:
+  命令: cd {{backend.projectPath}} && go build ./...
+  说明: 编译整个项目，检测语法和类型错误
+
+  额外检查:
+    - 静态分析: cd {{backend.projectPath}} && go vet ./...
+    - 依赖检查: cd {{backend.projectPath}} && go mod tidy
+    - 单文件编译: cd {{backend.projectPath}} && go build {modified_file}
+
+  检查项:
+    - Go 语法错误
+    - 类型不匹配
+    - 未使用的变量/导入
+    - 接口未实现
+    - 结构体字段类型问题
+    - GORM tag 格式错误
+
+  常见编译错误及修复:
+    - "undefined: xxx": 未定义的变量/函数/类型，检查 import 或拼写
+    - "cannot use xxx as type yyy": 类型不匹配
+    - "xxx declared and not used": 声明了但未使用的变量
+    - "imported and not used": 导入了但未使用的包
+    - "missing return at end of function": 函数缺少返回值
+    - "too many arguments / not enough arguments": 函数参数数量不匹配
+```

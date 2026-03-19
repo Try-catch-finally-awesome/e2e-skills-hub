@@ -1,0 +1,22 @@
+```yaml
+编译检查（Java Spring Boot + Maven）:
+  命令: cd {{backend.projectPath}} && mvn compile -q
+  说明: 使用 Maven 进行编译检查，-q 静默模式仅输出错误信息
+
+  替代命令（Gradle 项目）:
+    cd {{backend.projectPath}} && gradle compileJava -q
+
+  检查项:
+    - Java 语法错误
+    - 类型不匹配
+    - 缺失的 import
+    - 注解处理器错误（Lombok、MapStruct 等）
+    - MyBatis Plus 的 Mapper 注入问题（编译期可检测部分）
+
+  常见编译错误及修复:
+    - "cannot find symbol": 缺少 import 或类名拼写错误
+    - "incompatible types": 类型转换错误
+    - "method does not override or implement": 接口方法签名不匹配
+    - "unreported exception": 未捕获的受检异常
+    - "non-static method cannot be referenced from a static context": 静态调用错误
+```

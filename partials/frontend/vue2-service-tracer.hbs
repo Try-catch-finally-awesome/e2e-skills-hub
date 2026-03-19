@@ -1,0 +1,36 @@
+```yaml
+步骤:
+  a. 从页面组件的 import 语句中提取 service/API 文件路径:
+     如: import { getList, create } from '@/api/xxx'
+     或: import xxxApi from '@/api/xxx'
+     → Service: src/api/xxx.js
+
+  b. 读取 service/API 文件，提取:
+     - 所有 API 函数名（导出的函数）
+     - 每个函数的请求 URL
+       如: axios.get('/api/xxx/list') 或 request({ url: '/api/xxx/create', method: 'post' })
+     - HTTP 方法（GET/POST/PUT/DELETE）
+     - 请求参数（data / params）
+     - 响应数据处理
+
+  c. 检查 axios/request 实例配置:
+     搜索: Glob(pattern="{{frontend.projectPath}}/src/utils/request.js")
+     或: Glob(pattern="{{frontend.projectPath}}/src/utils/http.js")
+     提取:
+     - baseURL 配置（API 前缀）
+     - 请求拦截器（Token 注入等）
+     - 响应拦截器（错误处理等）
+
+  d. 如使用 mixin 模式:
+     搜索: Glob(pattern="{{frontend.projectPath}}/src/mixins/*.js")
+     提取:
+     - mixin 中封装的 API 调用
+     - 共享的 data/methods
+
+  e. 如使用 Vuex store:
+     搜索: Glob(pattern="{{frontend.projectPath}}/src/store/modules/*.js")
+     提取:
+     - actions 中的 API 调用
+     - mutations 中的状态变更
+     - getters 中的数据处理
+```

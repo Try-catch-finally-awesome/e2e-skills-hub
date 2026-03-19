@@ -1,0 +1,44 @@
+```yaml
+测试框架配置（JUnit 5）:
+  框架: JUnit 5 (Jupiter)
+  语言: Java
+
+  测试运行命令:
+    全量测试: cd {{backend.projectPath}} && mvn test
+    指定测试类: cd {{backend.projectPath}} && mvn test -Dtest={TestClassName}
+    指定测试方法: cd {{backend.projectPath}} && mvn test -Dtest={TestClassName}#{methodName}
+    跳过测试: cd {{backend.projectPath}} && mvn compile -DskipTests
+
+  测试文件位置:
+    路径: {{backend.projectPath}}/src/test/java/
+    命名规范: *Test.java 或 *Tests.java
+    示例: OrderServiceTest.java
+
+  常用注解:
+    - @Test: 标记测试方法
+    - @BeforeEach / @AfterEach: 每个测试前后执行
+    - @BeforeAll / @AfterAll: 所有测试前后执行（static 方法）
+    - @DisplayName("描述"): 测试显示名
+    - @Disabled: 禁用测试
+    - @ParameterizedTest: 参数化测试
+    - @Nested: 嵌套测试类
+    - @Tag("tag"): 测试标签
+    - @Timeout(value): 超时限制
+
+  断言:
+    - assertEquals(expected, actual): 相等断言
+    - assertNotNull(value): 非空断言
+    - assertTrue/assertFalse: 布尔断言
+    - assertThrows(Exception.class, () -> ...): 异常断言
+    - assertAll(): 组合断言
+
+  Spring Boot 集成测试:
+    - @SpringBootTest: 加载完整 Spring 上下文
+    - @WebMvcTest: 仅加载 Web 层
+    - @DataJpaTest: 仅加载 JPA 层
+    - @MockBean: Mock Spring Bean
+    - @Autowired MockMvc: MVC 测试工具
+
+  测试报告:
+    路径: {{backend.projectPath}}/target/surefire-reports/
+```

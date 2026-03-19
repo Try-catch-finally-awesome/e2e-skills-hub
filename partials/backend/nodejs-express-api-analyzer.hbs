@@ -1,0 +1,36 @@
+```yaml
+接口分析（Node.js Express）:
+  a. 读取 Route 文件，提取路由配置:
+     - router.get/post/put/delete/patch() 路由注册
+     - 路由参数: /:id, /:slug
+     - 中间件: auth, validate, upload 等
+     - 路由前缀: app.use('/api/xxx', xxxRouter)
+
+  b. 读取 Controller 函数，提取每个接口:
+     - 路径参数: req.params.id
+     - 查询参数: req.query.page, req.query.keyword
+     - 请求体: req.body（JSON 解析后的对象）
+     - 文件上传: req.file / req.files（multer）
+     - 响应: res.json() / res.status().json()
+     - 错误处理: next(error) / try-catch
+
+  c. 读取 Validator/校验中间件，提取校验规则:
+     express-validator:
+       搜索: Grep(pattern="body\\(|param\\(|query\\(|check\\(", path="{{backend.projectPath}}")
+       - body('field').isString().notEmpty() → 必填字符串
+       - body('field').isInt({ min: 1, max: 100 }) → 整数范围
+       - body('field').isEmail() → 邮箱格式
+       - body('field').isLength({ min: 1, max: 255 }) → 长度限制
+       - body('field').trim().escape() → 消毒处理
+
+     Joi:
+       搜索: Grep(pattern="Joi\\.", path="{{backend.projectPath}}")
+       - Joi.string().required() → 必填字符串
+       - Joi.number().min(1).max(100) → 数值范围
+       - Joi.string().email() → 邮箱格式
+
+  d. 读取 Service 层，提取业务逻辑:
+     - 数据库操作方法
+     - 事务处理
+     - 业务校验和错误抛出
+```

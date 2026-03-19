@@ -1,0 +1,49 @@
+```yaml
+测试框架配置（pytest）:
+  框架: pytest
+  语言: Python
+
+  测试运行命令:
+    全量测试: cd {{backend.projectPath}} && pytest
+    指定测试文件: cd {{backend.projectPath}} && pytest tests/{test_file}.py
+    指定测试函数: cd {{backend.projectPath}} && pytest tests/{test_file}.py::{test_function}
+    指定测试类方法: cd {{backend.projectPath}} && pytest tests/{test_file}.py::{TestClass}::{test_method}
+    详细输出: cd {{backend.projectPath}} && pytest -v
+    失败即停: cd {{backend.projectPath}} && pytest -x
+    上次失败重跑: cd {{backend.projectPath}} && pytest --lf
+
+  测试文件位置:
+    路径: {{backend.projectPath}}/tests/ 或与代码同目录
+    命名规范: test_*.py 或 *_test.py
+    示例: test_order_service.py
+
+  常用功能:
+    - def test_xxx(): 测试函数（以 test_ 开头）
+    - class TestXxx: 测试类（以 Test 开头）
+    - @pytest.fixture: 测试夹具（数据准备/清理）
+    - @pytest.mark.parametrize: 参数化测试
+    - @pytest.mark.skip / @pytest.mark.skipif: 跳过测试
+    - @pytest.mark.xfail: 预期失败
+    - conftest.py: 共享 fixture 和配置
+
+  断言:
+    - assert value == expected: 相等断言（使用原生 assert）
+    - assert value is not None: 非空断言
+    - with pytest.raises(ExceptionType): 异常断言
+    - pytest.approx(value): 浮点数近似比较
+
+  Django 集成测试:
+    - @pytest.mark.django_db: 允许数据库访问
+    - pytest-django 插件
+    - APIClient / Client 测试客户端
+    - TransactionTestCase: 事务测试
+
+  FastAPI 集成测试:
+    - TestClient(app): FastAPI 测试客户端
+    - httpx.AsyncClient: 异步测试
+    - @pytest.fixture 中 override dependencies
+
+  测试报告:
+    命令: cd {{backend.projectPath}} && pytest --html=report.html（pytest-html 插件）
+    或: cd {{backend.projectPath}} && pytest --junitxml=report.xml
+```

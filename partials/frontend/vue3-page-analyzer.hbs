@@ -1,0 +1,50 @@
+```yaml
+页面功能分析（Vue 3 SFC）:
+  a. 读取页面组件的 <template> 部分，提取:
+     表格:
+       - 组件名: {{frontend.uiLibrary}} 的表格组件
+       - 列定义: columns 数组或 <n-data-table-column> / <el-table-column> 子组件
+       - 操作列: 编辑/删除/详情 按钮
+       - 选择列: 多选框 / 单选
+       - 排序: sortable 属性
+       - 自定义渲染: render / slot / #default
+
+     查询表单:
+       - 搜索条件字段: 输入框、下拉选择、日期选择器等
+       - 查询按钮和重置按钮
+       - 高级搜索/折叠展开
+
+     操作按钮:
+       - 新增按钮
+       - 批量删除按钮
+       - 导入/导出按钮
+       - 其他业务操作按钮
+
+     弹窗/表单:
+       - 新增/编辑弹窗（NModal / ElDialog / AModal）
+       - 表单字段列表和组件类型
+       - 表单校验规则（rules 属性）
+       - 提交/取消按钮
+
+     其他功能:
+       - Tab 标签页
+       - 树形结构
+       - 上传组件
+       - 富文本编辑器
+       - 状态标签/徽章
+
+  b. 读取 <script setup> 部分，提取:
+     - 表单校验规则定义（FormRules / FormItemRule）
+     - 接口调用的触发时机（onMounted / 按钮 click / watch）
+     - 状态管理（Pinia store 使用）
+     - 事件处理函数
+
+  c. 分析表单校验规则:
+     搜索 rules 对象定义:
+     - required: true → 必填项
+     - type: 'string'/'number'/'email' → 类型校验
+     - min/max → 长度限制
+     - pattern → 正则校验
+     - validator → 自定义校验函数
+     - trigger: 'blur'/'change' → 校验触发时机
+```

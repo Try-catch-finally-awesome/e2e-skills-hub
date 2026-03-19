@@ -1,0 +1,44 @@
+```yaml
+表名提取方式（GORM）:
+  a. 从 Model 的 TableName() 方法提取:
+     搜索: Grep(pattern="func.*TableName\\(\\).*string", path="{{backend.projectPath}}")
+     示例:
+       func (Order) TableName() string {
+           return "bos_orders"
+       }
+     → 表名: bos_orders
+
+  b. 从 GORM 默认命名规则推断:
+     GORM v2 默认: 结构体名转蛇形复数
+     示例: Order → orders, OrderItem → order_items
+     可通过 NamingStrategy 配置自定义命名规则
+
+  c. 从 gorm tag 提取字段映射:
+     搜索: Grep(pattern="gorm:\"column:", path="{{backend.projectPath}}")
+     示例: OrderNo string `gorm:"column:order_no"` → 数据库字段: order_no
+
+  d. 从 gorm tag 提取关联关系:
+     搜索: Grep(pattern="gorm:\"foreignKey:|gorm:\"many2many:", path="{{backend.projectPath}}")
+     示例:
+       Supplier Supplier `gorm:"foreignKey:SupplierID"`
+     → 关联表: 从 Supplier 结构体的 TableName() 获取
+
+  e. 从 many2many tag 提取中间表:
+     示例:
+       Tags []Tag `gorm:"many2many:order_tags;"`
+     → 中间表: order_tags
+
+  f. 从 db.Table() 调用提取:
+     搜索: Grep(pattern="db\\.Table\\(|Table\\(", path="{{backend.projectPath}}")
+     示例: db.Table("orders").Where(...)
+     → 直接指定的表名
+
+  g. 从 AutoMigrate 调用确认:
+     搜索: Grep(pattern="AutoMigrate", path="{{backend.projectPath}}")
+     列出所有注册的模型
+
+  h. 汇总所有关联表名:
+     - 主表: 从 TableName() 方法或默认规则
+     - 关联表: 从 foreignKey tag 引用的模型
+     - 中间表: 从 many2many tag
+```

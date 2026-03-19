@@ -1,0 +1,35 @@
+```yaml
+判断条件（满足任一即归因为后端 - ASP.NET Core）:
+  - 后端返回 HTTP 5xx
+  - Entity Framework Core 异常（DbUpdateException、InvalidOperationException）
+  - 数据库操作失败（SQL 错误、约束违反）
+  - 业务逻辑错误（状态流转不正确、计算错误）
+  - 数据库查询结果与预期不符
+  - DI 容器解析失败
+  - Model 绑定/校验失败
+
+常见异常类型:
+  - DbUpdateException: 数据库更新失败（唯一约束、外键约束违反）
+  - DbUpdateConcurrencyException: 并发更新冲突
+  - InvalidOperationException: 无效操作（如 SingleOrDefault 返回多条）
+  - SqlException: SQL Server 原生异常
+  - NullReferenceException: 空引用异常
+  - ArgumentNullException: 参数为空
+  - ArgumentException: 参数无效
+  - ValidationException: DataAnnotations 校验失败
+  - KeyNotFoundException: 字典中键不存在
+  - FormatException: 格式转换失败
+  - OverflowException: 数值溢出
+  - UnauthorizedAccessException: 未授权访问
+  - NotImplementedException: 方法未实现
+  - TimeoutException: 操作超时
+  - HttpRequestException: HTTP 请求失败（调用外部服务）
+
+修复范围: {{backend.projectPath}}/ 下的 C# 文件
+编译验证: dotnet build "{{backend.projectPath}}"
+
+服务重启提示:
+  - dotnet watch run 模式下通常自动重启
+  - 手动重启: cd {{backend.projectPath}} && dotnet run
+  - IIS 部署需要重新发布
+```

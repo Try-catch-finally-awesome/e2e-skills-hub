@@ -1,0 +1,40 @@
+```yaml
+搜索顺序:
+  a. 确定路由模式:
+     检查是否存在 app/ 目录（App Router）或 pages/ 目录（Pages Router）
+     Glob(pattern="{{frontend.projectPath}}/app/**/page.tsx")
+     Glob(pattern="{{frontend.projectPath}}/src/app/**/page.tsx")
+     Glob(pattern="{{frontend.projectPath}}/pages/**/*.tsx")
+
+  b. App Router 模式 — 从文件系统路由找到页面组件:
+     路由路径 /xxx 对应: app/xxx/page.tsx 或 src/app/xxx/page.tsx
+     布局文件: app/xxx/layout.tsx
+     加载状态: app/xxx/loading.tsx
+     错误处理: app/xxx/error.tsx
+     API 路由: app/api/xxx/route.ts
+
+  c. Pages Router 模式 — 从文件系统路由找到页面组件:
+     路由路径 /xxx 对应: pages/xxx.tsx 或 pages/xxx/index.tsx
+     API 路由: pages/api/xxx.ts
+
+  d. 读取页面组件，记录:
+     - 文件路径
+     - 所有 import 的组件、hooks、API 文件
+     - Server Components vs Client Components（'use client' 指令）
+     - 数据获取方式:
+       - App Router: async 组件 / fetch() / Server Actions
+       - Pages Router: getServerSideProps / getStaticProps / useEffect + fetch
+     - 使用的 UI 组件（{{frontend.uiLibrary}} 组件名）
+     - 页面包含的功能:
+       - 表格/列表
+       - 表单
+       - 按钮
+       - 模态框/抽屉
+       - 搜索/查询区域
+
+  e. 分析组件结构:
+     - Server Components: 直接 async/await 数据获取
+     - Client Components: useState / useEffect / 自定义 hooks
+     - Server Actions: 'use server' 标记的函数
+     - API Routes: NextRequest/NextResponse 处理
+```

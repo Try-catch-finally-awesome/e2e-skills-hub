@@ -1,0 +1,35 @@
+```yaml
+接口分析（ASP.NET Core）:
+  a. 读取 Controller 文件，提取路由配置:
+     - [Route("api/[controller]")] 类级路由
+     - [HttpGet("{id}")] / [HttpPost] / [HttpPut] / [HttpDelete] 方法级路由
+     - [Authorize] 认证要求
+     - [AllowAnonymous] 匿名访问
+
+  b. 读取 Action 方法，提取每个接口:
+     - 路径参数: [FromRoute] int id
+     - 查询参数: [FromQuery] string keyword
+     - 请求体: [FromBody] CreateOrderDTO dto
+     - 表单数据: [FromForm] IFormFile file
+     - 返回类型: ActionResult<T> / IActionResult
+     - 状态码: Ok() / Created() / BadRequest() / NotFound()
+
+  c. 读取 DTO 文件，提取 DataAnnotations 校验规则:
+     搜索: Grep(pattern="\\[Required\\]|\\[StringLength|\\[Range|\\[RegularExpression", path="{{backend.projectPath}}")
+     提取每个属性的:
+     - 属性名和类型（string, int, decimal, DateTime 等）
+     - [Required] → 必填项
+     - [StringLength(max, MinimumLength=min)] → 长度限制
+     - [Range(min, max)] → 数值范围
+     - [RegularExpression(pattern)] → 正则校验
+     - [EmailAddress] → 邮箱格式
+     - [Phone] → 电话号码格式
+     - [Compare("OtherProperty")] → 字段比较
+     - [MaxLength] / [MinLength] → 长度限制
+     - 自定义 ValidationAttribute
+
+  d. 读取 Service/BLL 层，提取业务逻辑:
+     - 事务处理: using var transaction = await _context.Database.BeginTransactionAsync()
+     - 业务校验和异常
+     - LINQ 查询逻辑
+```

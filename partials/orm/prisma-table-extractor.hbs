@@ -1,0 +1,49 @@
+```yaml
+表名提取方式（Prisma）:
+  a. 从 schema.prisma 的 model 定义提取:
+     搜索: Read("{{backend.projectPath}}/prisma/schema.prisma")
+     示例:
+       model Order {
+         id        Int      @id @default(autoincrement())
+         orderNo   String   @map("order_no")
+         @@map("bos_orders")
+       }
+     → 表名: bos_orders（@@map 指定）
+
+  b. 如无 @@map，默认使用 model 名:
+     Prisma 默认规则: model 名直接作为表名
+     示例: model Order → 表名: Order
+
+  c. 从 @map 提取字段映射:
+     示例: orderNo String @map("order_no") → 数据库字段: order_no
+
+  d. 从关系字段提取关联表:
+     示例:
+       model Order {
+         supplier   Supplier @relation(fields: [supplierId], references: [id])
+         supplierId Int      @map("supplier_id")
+       }
+     → 关联表: Supplier model 对应的表名
+
+  e. 从隐式多对多关系提取中间表:
+     示例:
+       model Order {
+         tags Tag[]
+       }
+       model Tag {
+         orders Order[]
+       }
+     → 隐式中间表: _OrderToTag（Prisma 自动生成，以 _ 开头）
+
+  f. 从显式多对多关系提取中间表:
+     如定义了中间 model，使用该 model 的 @@map 或名称
+
+  g. 从 Prisma Migration 确认:
+     搜索: Glob(pattern="{{backend.projectPath}}/prisma/migrations/*/migration.sql")
+     查看 CREATE TABLE 语句
+
+  h. 汇总所有关联表名:
+     - 主表: 从 @@map 或 model 名
+     - 关联表: 从 @relation 引用的 model
+     - 中间表: 从隐式或显式多对多关系
+```

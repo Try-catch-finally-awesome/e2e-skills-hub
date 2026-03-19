@@ -1,0 +1,37 @@
+```yaml
+表名提取方式（Django ORM）:
+  a. 从 Model 的 class Meta: db_table 提取:
+     搜索: Grep(pattern="db_table", path="{{backend.projectPath}}")
+     示例:
+       class Order(models.Model):
+           class Meta:
+               db_table = 'bos_orders'
+     → 表名: bos_orders
+
+  b. 从 Model 类名推断默认表名:
+     Django 默认规则: {app_label}_{model_name_lowercase}
+     示例: 应用 goods 中的 Order 模型 → goods_order
+
+  c. 从字段定义提取关联表:
+     搜索: Grep(pattern="ForeignKey|OneToOneField|ManyToManyField", path="{{backend.projectPath}}")
+     示例:
+       supplier = models.ForeignKey('Supplier', on_delete=models.CASCADE)
+     → 关联模型 Supplier 对应的表
+
+  d. 从 ManyToManyField 推断中间表:
+     默认中间表名: {app_label}_{model1_lowercase}_{field_name}
+     或自定义: through='CustomM2MModel'
+
+  e. 从 Migration 文件确认表名:
+     搜索: Glob(pattern="{{backend.projectPath}}/**/migrations/0*.py")
+     查看 migrations.CreateModel 和 options={'db_table': 'xxx'}
+
+  f. 从 db_table_comment 获取表注释（Django 4.2+）:
+     搜索: Grep(pattern="db_table_comment", path="{{backend.projectPath}}")
+
+  g. 汇总所有关联表名:
+     - 主表: 从 Meta.db_table 或默认命名规则
+     - 关联表: 从 ForeignKey/OneToOneField 引用的模型
+     - 多对多中间表: 从 ManyToManyField 推断或 through 指定
+     - 代理模型: 不创建新表（proxy = True）
+```

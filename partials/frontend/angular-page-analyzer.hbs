@@ -1,0 +1,44 @@
+```yaml
+页面功能分析（Angular 组件）:
+  a. 读取组件模板（*.component.html），提取:
+     表格:
+       - 组件名: {{frontend.uiLibrary}} 的表格组件（mat-table / nz-table / p-table）
+       - 列定义: matColumnDef / nzHeader / [columns] 等
+       - 操作列: 编辑/删除/详情 按钮（(click) 事件）
+       - 选择列: mat-checkbox / nz-checkbox
+       - 排序: matSort / nzSortFn
+       - 分页: mat-paginator / nz-pagination
+
+     查询表单:
+       - 搜索条件字段: mat-form-field / nz-input / input 等
+       - [formGroup] / [(ngModel)] 绑定
+       - 查询按钮和重置按钮
+
+     操作按钮:
+       - 新增按钮（(click) 绑定处理函数）
+       - 批量删除按钮
+       - 导入/导出按钮
+
+     弹窗/表单:
+       - MatDialog / NzModal / Dialog 对话框
+       - [formGroup] Reactive Forms 表单
+       - [(ngModel)] Template-driven Forms
+       - 校验反馈: mat-error / nz-form-explain / *ngIf="form.get('xxx').errors"
+       - 提交/取消按钮
+
+  b. 读取组件类（*.component.ts），提取:
+     - FormGroup / FormBuilder 表单构建
+     - Validators 校验器定义
+     - 接口调用和数据处理逻辑
+     - Observable subscribe / pipe 数据流
+
+  c. 分析 Reactive Forms 校验规则:
+     搜索 FormBuilder.group() 或 new FormGroup():
+     - Validators.required → 必填项
+     - Validators.minLength(n) / Validators.maxLength(n) → 长度限制
+     - Validators.min(n) / Validators.max(n) → 数值范围
+     - Validators.pattern(regex) → 正则校验
+     - Validators.email → 邮箱格式
+     - 自定义 ValidatorFn → 自定义校验
+     - 异步校验器 AsyncValidatorFn
+```

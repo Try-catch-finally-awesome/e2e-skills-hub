@@ -1,0 +1,43 @@
+```yaml
+数据库验证配置（PostgreSQL）:
+  MCP 工具: {{mcp.database.name}}
+  数据库名: {{mcp.database.database}}
+
+  验证操作:
+    查询验证:
+      - 使用 SELECT 语句验证数据正确性
+      - 示例: SELECT * FROM {table} WHERE {condition} ORDER BY id DESC LIMIT 1
+
+    新增验证:
+      - INSERT ... RETURNING 验证:
+        INSERT INTO {table} (...) VALUES (...) RETURNING *
+      - 或按业务字段查询:
+        SELECT * FROM {table} WHERE order_no = '{test_value}' AND is_deleted = false
+
+    更新验证:
+      - UPDATE 后验证:
+        SELECT {updated_fields} FROM {table} WHERE id = {id}
+      - 验证更新时间:
+        SELECT update_time FROM {table} WHERE id = {id}
+
+    删除验证:
+      - 软删除验证:
+        SELECT is_deleted, delete_time FROM {table} WHERE id = {id}
+      - 硬删除验证:
+        SELECT COUNT(*) FROM {table} WHERE id = {id}（期望结果为 0）
+
+    数量验证:
+      - SELECT COUNT(*) FROM {table} WHERE {condition}
+
+  PostgreSQL 特有注意事项:
+    - Schema: 默认 public schema，注意 search_path 设置
+    - 布尔类型: 使用 true/false 而非 0/1
+    - 序列: SERIAL / BIGSERIAL 自增（或 IDENTITY）
+    - 时间字段: TIMESTAMP WITH TIME ZONE 格式
+    - JSON 类型: jsonb 支持索引查询，使用 ->> 操作符
+    - 数组类型: 使用 ANY() 或 @> 操作符
+    - 大小写: 标识符默认转小写，双引号保留大小写
+    - UUID 类型: 使用 gen_random_uuid() 或 uuid-ossp 扩展
+    - 事务隔离级别: 默认 READ COMMITTED
+    - UPSERT: 使用 ON CONFLICT ... DO UPDATE
+```

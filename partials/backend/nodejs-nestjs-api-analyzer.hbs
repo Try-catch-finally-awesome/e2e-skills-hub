@@ -1,0 +1,39 @@
+```yaml
+接口分析（Node.js NestJS）:
+  a. 读取 Controller 文件，提取路由配置:
+     - @Controller('resource') 类级路由前缀
+     - @Get() / @Post() / @Put() / @Patch() / @Delete() 方法级路由
+     - @UseGuards(AuthGuard) 认证守卫
+     - @UseInterceptors() 拦截器
+     - @UsePipes(ValidationPipe) 校验管道
+
+  b. 读取 Action 方法，提取每个接口:
+     - 路径参数: @Param('id') id: string
+     - 查询参数: @Query('page') page: number
+     - 请求体: @Body() createDto: CreateOrderDto
+     - 文件上传: @UploadedFile() file: Express.Multer.File
+     - 返回类型: Promise<Order> 或 Observable<Order>
+     - HTTP 状态码: @HttpCode(HttpStatus.CREATED)
+     - 响应头: @Header('key', 'value')
+
+  c. 读取 DTO 文件，提取 class-validator 校验规则:
+     搜索: Grep(pattern="@IsString|@IsNumber|@IsNotEmpty|@MinLength|@MaxLength|@IsEmail|@IsOptional|@ValidateNested", path="{{backend.projectPath}}/src")
+     提取每个字段的:
+     - 字段名和 TypeScript 类型
+     - @IsNotEmpty() → 必填项
+     - @IsString() / @IsNumber() / @IsBoolean() → 类型校验
+     - @MinLength(n) / @MaxLength(n) → 长度限制
+     - @Min(n) / @Max(n) → 数值范围
+     - @IsEmail() → 邮箱格式
+     - @IsEnum(EnumType) → 枚举值
+     - @IsOptional() → 可选项
+     - @ValidateNested() → 嵌套对象校验
+     - @Type(() => SubDto) → class-transformer 类型转换
+     - @IsArray() / @ArrayMinSize(n) → 数组校验
+
+  d. 读取 Service 层，提取业务逻辑:
+     - 注入的 Repository（@InjectRepository(Entity)）
+     - TypeORM 查询: find(), findOne(), save(), update(), delete()
+     - QueryBuilder 复杂查询
+     - 事务处理: @Transaction() 或 queryRunner
+```

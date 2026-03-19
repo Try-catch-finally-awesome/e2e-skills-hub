@@ -1,0 +1,39 @@
+```yaml
+步骤:
+  a. 从页面组件的 import 语句中提取 service/API 文件路径:
+     如: import { getList, create } from '@/services/xxxAPI'
+     或: import { useXxxQuery, useXxxMutation } from '@/hooks/useXxx'
+     → Service: src/services/xxxAPI.ts 或 src/hooks/useXxx.ts
+
+  b. 读取 service/API 文件，提取:
+     - 所有 API 函数名（导出的函数）
+     - 每个函数的请求 URL
+       如: axios.get('/api/xxx/list') 或 fetch('/api/xxx/create', { method: 'POST' })
+     - HTTP 方法（GET/POST/PUT/DELETE）
+     - 请求参数类型（TypeScript 接口/类型）
+     - 响应数据类型
+
+  c. 检查 axios/fetch 实例配置:
+     搜索: Glob(pattern="{{frontend.projectPath}}/src/utils/request.ts")
+     或: Glob(pattern="{{frontend.projectPath}}/src/lib/api.ts")
+     提取:
+     - baseURL 配置
+     - 请求拦截器
+     - 响应拦截器
+
+  d. 如使用 React Query (TanStack Query):
+     搜索: Grep(pattern="useQuery|useMutation", path="{{frontend.projectPath}}/src")
+     提取:
+     - queryKey 定义
+     - queryFn 中的 API 调用
+     - mutationFn 中的 API 调用
+     - onSuccess/onError 回调
+
+  e. 如使用 SWR:
+     搜索: Grep(pattern="useSWR|useSWRMutation", path="{{frontend.projectPath}}/src")
+     提取: key 和 fetcher 函数
+
+  f. 检查 TypeScript 类型定义:
+     搜索: Glob(pattern="{{frontend.projectPath}}/src/types/*.ts")
+     提取: 接口/类型定义（请求参数、响应数据结构）
+```

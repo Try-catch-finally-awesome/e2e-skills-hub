@@ -1,0 +1,27 @@
+```yaml
+表名提取方式（Python Django ORM）:
+  a. 从 Model 的 class Meta: db_table 提取:
+     搜索: Grep(pattern="db_table", path="{{backend.projectPath}}")
+     示例:
+       class Order(models.Model):
+           class Meta:
+               db_table = 'bos_orders'
+     → 表名: bos_orders
+
+  b. 从 Model 类名推断默认表名:
+     Django 默认规则: {app_label}_{model_name_lowercase}
+     示例: app 名 goods 中的 Order 模型 → 表名: goods_order
+
+  c. 从 ForeignKey/ManyToManyField 提取关联表:
+     示例: supplier = models.ForeignKey('Supplier', on_delete=models.CASCADE)
+     → 关联表: 从 Supplier 模型获取其表名
+
+  d. 从 Migration 文件确认表名（如有疑问）:
+     搜索: Glob(pattern="{{backend.projectPath}}/**/migrations/*.py")
+     查看 CreateModel 操作中的 db_table 选项
+
+  e. 汇总所有关联表名:
+     - 主表: 从 Model Meta.db_table 或类名推断
+     - 关联表: 从 ForeignKey/OneToOneField 引用的模型
+     - 多对多中间表: 从 ManyToManyField 推断（默认 {model1}_{model2}）
+```

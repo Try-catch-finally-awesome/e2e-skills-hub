@@ -1,0 +1,25 @@
+```yaml
+编译检查（Python Django）:
+  命令: cd {{backend.projectPath}} && python manage.py check
+  说明: 运行 Django 系统检查框架，检测常见配置问题
+
+  额外检查:
+    - 语法检查: cd {{backend.projectPath}} && python -m py_compile {modified_file}
+    - Migration 检查: cd {{backend.projectPath}} && python manage.py makemigrations --check --dry-run
+    - Import 检查: cd {{backend.projectPath}} && python -c "import {module_name}"
+
+  检查项:
+    - Python 语法错误
+    - Django 配置错误（settings.py）
+    - Model 定义问题（字段类型、关系定义）
+    - Migration 一致性
+    - URL 配置问题（路由冲突、缺少视图函数）
+    - Serializer 定义问题
+
+  常见检查错误及修复:
+    - "SyntaxError": Python 语法错误（缩进、括号、冒号等）
+    - "ImportError / ModuleNotFoundError": 模块引用错误
+    - "FieldError": Model 字段定义问题
+    - "ImproperlyConfigured": settings.py 配置错误
+    - "(models.E xxx)": Django Model 系统检查错误
+```

@@ -1,0 +1,161 @@
+---
+name: e2e-orchestrator
+description: E2E 集成测试主编排器。用户提供前端页面 URL 或功能描述，自动调度 5 个子 skill 完成：代码溯源→生成用例→执行测试→错误归因修复→生成报告，循环直到所有用例通过。
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Task
+---
+
+# E2E Orchestrator - E2E 集成测试主编排器
+
+## 概述
+
+这是 E2E 集成测试的主入口，负责调度 5 个子 skill 协同完成测试。用户只需提供一个前端页面 URL。
+
+```
+用法: /e2e-orchestrator http://localhost:{{frontend.port}}/target-page
+```
+
+## 子 Skill 调度链路
+
+```mermaid
+flowchart TD
+    U["用户输入页面URL"] --> A
+    A["阶段0: 环境检查<br/>(主编排器自行完成)"] --> B
+    B["阶段1: e2e-code-tracer<br/>代码溯源"] --> C
+    C["阶段2: e2e-testcase-generator<br/>生成测试用例"] --> D
+    D["阶段3: e2e-playwright-runner<br/>执行测试"] --> E{全部通过?}
+    E -->|是| G["阶段5: e2e-report-generator<br/>生成报告"]
+    E -->|否| F["阶段4: e2e-error-fixer<br/>错误归因与修复"]
+    F --> D
+    G --> H["测试完成"]
+```
+
+| 阶段 | 子 Skill | 职责 | 输入 | 输出 |
+|------|---------|------|------|------|
+| 0 | _(主编排器)_ | 环境检查 | 页面 URL | 服务就绪确认 |
+| 1 | `e2e-code-tracer` | 从 URL 反推三层代码 | 页面 URL | 代码溯源清单 |
+| 2 | `e2e-testcase-generator` | 生成测试用例 | 溯源清单 | 测试用例表 |
+| 3 | `e2e-playwright-runner` | Playwright 执行测试 | 用例表 | 执行结果 |
+| 4 | `e2e-error-fixer` | 错误归因+修复+重测 | 失败用例信息 | 修复记录 |
+| 5 | `e2e-report-generator` | 生成测试报告 | 全部阶段数据 | 测试报告.md |
+
+## URL 输入格式
+
+支持三种格式：
+- 完整 URL: `http://localhost:{{frontend.port}}/target-page`
+- 省略协议: `localhost:{{frontend.port}}/target-page`
+- 仅路径: `/target-page`（自动补全为 `http://localhost:{{frontend.port}}/target-page`）
+
+## 项目信息
+
+```yaml
+后端 ({{backend.projectName}}):
+  技术栈: {{backend.framework}} ({{backend.language}})
+  路径: {{backend.projectPath}}
+  端口: {{backend.port}}
+  ORM: {{backend.orm}}
+
+前端 ({{frontend.projectName}}):
+  技术栈: {{frontend.framework}}{{#if frontend.uiLibrary}} + {{frontend.uiLibrary}}{{/if}}
+  路径: {{frontend.projectPath}}
+  端口: {{frontend.port}}
+
+{{#if middlePlatform}}
+中台 ({{middlePlatform.projectName}}):
+  技术栈: {{middlePlatform.framework}}
+  路径: {{middlePlatform.projectPath}}
+  端口: {{middlePlatform.port}}
+{{/if}}
+```
+
+{{#if testAccount}}
+## 测试登录账号
+
+```yaml
+登录方式: {{testAccount.loginType}}
+username: "{{testAccount.username}}"
+password: "{{testAccount.password}}"
+
+登录步骤:
+  1. 访问前端页面，若未登录会自动跳转到登录页
+  2. 输入用户名和密码
+  3. 点击"{{testAccount.loginType}}"按钮完成登录
+  4. 登录成功后导航到目标页面 URL
+```
+{{/if}}
+
+## 阶段 0: 环境检查（主编排器直接执行）
+
+```yaml
+步骤:
+  1. 解析 URL，确认格式正确
+  2. 检查前端服务: Playwright browser_navigate 访问页面 URL
+{{> environment-check}}
+
+未启动时:
+  - 列出未启动的服务及启动命令
+  - 等待用户确认后继续
+```
+
+## 阶段 1: 调度 e2e-code-tracer
+
+```yaml
+输入: 用户提供的页面 URL
+执行: 读取子 skill 说明，按其流程从 URL 反推代码链路
+输出: 代码溯源清单（前端→{{#if middlePlatform}}中台→{{/if}}后端→数据库表的完整文件路径）
+
+{{#if mcp.database}}
+同时检查:
+  - 数据库表是否存在（{{mcp.database.name}} MCP 查询 information_schema）
+  - 如表不存在，从开发文档或 Entity 代码推断 DDL 并创建
+{{/if}}
+```
+
+## 阶段 2: 调度 e2e-testcase-generator
+
+```yaml
+输入: 阶段 1 的代码溯源清单
+执行: 读取子 skill 说明，分析页面功能，生成测试用例
+输出: 测试用例清单表格（TC-001 ~ TC-XXX）
+```
+
+## 阶段 3: 调度 e2e-playwright-runner
+
+```yaml
+输入: 阶段 2 的测试用例清单
+执行: 读取子 skill 说明，用 Playwright MCP 逐个执行用例
+输出: 每个用例的通过/失败结果，失败用例的错误信息
+```
+
+## 阶段 4: 调度 e2e-error-fixer（仅在有失败时）
+
+```yaml
+输入: 阶段 3 中失败的用例及其错误信息
+执行: 读取子 skill 说明，归因→修复→编译→标记待重测
+输出: 修复记录
+
+修复完成后: 回到阶段 3，重新执行失败用例
+
+循环条件:
+  - 所有用例通过 → 进入阶段 5
+  - 单个用例修复 {{config.maxSingleFix}} 次仍失败 → 标记"需人工介入"，继续其他用例
+  - 全局修复超 {{config.maxFixRounds}} 次 → 暂停，请求用户指导
+```
+
+## 阶段 5: 调度 e2e-report-generator
+
+```yaml
+输入: 所有阶段的输出数据
+执行: 读取子 skill 说明，汇总生成报告
+输出: {{config.report.outputPath}}/{页面路径}_E2E测试报告_{日期}.md
+```
+
+## 核心原则
+
+```yaml
+- 所有测试用例必须全部通过才算测试完成
+- 每个失败必须有明确的错误归因（{{#if middlePlatform}}前端/中台/后端{{else}}前端/后端{{/if}}）
+- 修复后必须重测验证
+- 测试数据使用 {{config.testDataPrefix}} 前缀，完成后清理
+- 不修改与测试无关的代码
+- 不执行 Git 操作
+```

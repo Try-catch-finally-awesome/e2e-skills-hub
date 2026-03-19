@@ -1,0 +1,41 @@
+```yaml
+搜索顺序:
+  a. 在后端项目中搜索 Controller:
+     Grep(pattern="{api_keyword}", path="{{backend.projectPath}}")
+     重点搜索: **/Controllers/ 目录
+     匹配: [Route] / [HttpGet] / [HttpPost] 等特性中的 API 路径
+
+  b. 读取后端相关文件（ASP.NET Core 分层结构）:
+     - Controller 文件（[ApiController], [Route]）
+       搜索路径: {{backend.projectPath}}/**/Controllers/
+       提取: 路由特性、HTTP 方法特性、参数绑定
+     - Service/BLL 层（业务逻辑层）
+       搜索路径: {{backend.projectPath}}/**/Services/ 或 **/BLL/
+       提取: 接口定义 + 实现类、业务方法
+     - Repository/DAL 层（数据访问层）
+       搜索路径: {{backend.projectPath}}/**/Repositories/ 或 **/DAL/
+       提取: 数据库操作方法
+     - Models/Entities（实体模型）
+       搜索路径: {{backend.projectPath}}/**/Models/ 或 **/Entities/
+       提取: 属性定义、[Table] 特性、EF 配置
+     - DTOs（请求/响应对象）
+       搜索路径: {{backend.projectPath}}/**/DTOs/ 或 **/ViewModels/
+       提取: 属性定义、DataAnnotations 校验特性
+     - DbContext（EF Core 数据库上下文）
+       搜索路径: {{backend.projectPath}}/**/Data/ 或 **/DbContext/
+       提取: DbSet<T> 定义、OnModelCreating 配置
+
+  c. 追踪调用链:
+     - 从 Controller 的构造函数注入找到 Service 接口
+     - 从 Service 实现类找到 Repository 或 DbContext 注入
+     - 从 Repository/DbContext 找到 Entity 模型
+     - 从 Entity 的 [Table] 特性或 DbContext 配置提取表名
+     - DI 注册通常在 Program.cs 或 Startup.cs
+
+  d. 记录每个文件的关键信息:
+     - Controller: 路由路径、HTTP 方法、参数绑定([FromBody]/[FromQuery])
+     - Service: 接口方法签名、事务处理
+     - Repository: EF Core 查询方法（LINQ）
+     - Entity: 属性列表、[Table]、[Key]、[Column] 特性
+     - DTO: 属性列表、[Required]、[StringLength] 等校验特性
+```

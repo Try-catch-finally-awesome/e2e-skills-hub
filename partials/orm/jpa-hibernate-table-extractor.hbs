@@ -1,0 +1,41 @@
+```yaml
+表名提取方式（JPA / Hibernate）:
+  a. 从 Entity 的 @Table 注解提取:
+     搜索: Grep(pattern="@Table\\(", path="{{backend.projectPath}}/src/main/java")
+     示例:
+       @Entity
+       @Table(name = "bos_orders", schema = "public")
+       public class Order { ... }
+     → 表名: bos_orders
+
+  b. 从 @Entity 注解的 name 属性:
+     搜索: Grep(pattern="@Entity", path="{{backend.projectPath}}/src/main/java")
+     如无 @Table 注解，JPA 使用 @Entity(name="xxx") 或类名作为表名
+     默认规则: 类名直接作为表名（区分大小写取决于数据库）
+
+  c. 从 @Column 注解提取字段映射:
+     搜索: Grep(pattern="@Column\\(", path="{{backend.projectPath}}/src/main/java")
+     示例: @Column(name = "order_no", nullable = false, length = 50)
+
+  d. 从 @JoinColumn 和关系注解提取关联表:
+     搜索: Grep(pattern="@ManyToOne|@OneToMany|@ManyToMany|@OneToOne|@JoinColumn", path="{{backend.projectPath}}/src/main/java")
+     示例:
+       @ManyToOne
+       @JoinColumn(name = "supplier_id")
+       private Supplier supplier;
+     → 关联表: supplier 对应的表
+
+  e. 从 JPQL / Native Query 提取:
+     搜索: Grep(pattern="@Query|nativeQuery|createQuery|createNativeQuery", path="{{backend.projectPath}}/src/main/java")
+     提取 JPQL 中的实体名或 Native SQL 中的表名
+
+  f. 从 Hibernate naming strategy 确认:
+     检查 application.yml/properties 中的命名策略配置:
+     spring.jpa.hibernate.naming.physical-strategy
+     常见: SpringPhysicalNamingStrategy（驼峰转下划线）
+
+  g. 汇总所有关联表名:
+     - 主表: 从 @Table 或实体名推断
+     - 关联表: 从 @JoinColumn/@JoinTable 关系注解
+     - 中间表: 从 @JoinTable(name="xxx") 多对多关系
+```

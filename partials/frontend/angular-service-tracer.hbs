@@ -1,0 +1,41 @@
+```yaml
+步骤:
+  a. 从组件的 constructor 注入中提取 Service:
+     如: constructor(private xxxService: XxxService)
+     → Service: src/app/services/xxx.service.ts
+
+  b. 读取 Service 文件（*.service.ts），提取:
+     - 所有公开方法
+     - 每个方法的 HttpClient 请求:
+       如: this.http.get<T>('/api/xxx/list')
+       或: this.http.post<T>('/api/xxx/create', body)
+     - HTTP 方法（GET/POST/PUT/DELETE）
+     - 请求 URL
+     - 请求参数（HttpParams）
+     - 请求头（HttpHeaders）
+     - 响应类型（泛型 T）
+
+  c. 检查 HTTP 拦截器配置:
+     搜索: Grep(pattern="HttpInterceptor|HTTP_INTERCEPTORS", path="{{frontend.projectPath}}/src")
+     提取:
+     - 认证拦截器（Token 注入）
+     - 错误处理拦截器
+     - Loading 拦截器
+
+  d. 检查 environment 配置:
+     搜索: Glob(pattern="{{frontend.projectPath}}/src/environments/environment*.ts")
+     提取: apiUrl / baseUrl 等 API 基础地址配置
+
+  e. 如使用 NgRx store:
+     搜索: Grep(pattern="createAction|createEffect|createReducer", path="{{frontend.projectPath}}/src")
+     提取:
+     - Actions 定义
+     - Effects 中的 API 调用
+     - Reducers 中的状态变更
+     - Selectors 数据选择器
+
+  f. 检查 TypeScript 接口/类型定义:
+     搜索: Glob(pattern="{{frontend.projectPath}}/src/app/models/*.ts")
+     或: Glob(pattern="{{frontend.projectPath}}/src/app/interfaces/*.ts")
+     提取: 接口定义（请求参数、响应数据结构）
+```
