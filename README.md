@@ -2,12 +2,13 @@
 
 Claude Code 插件，自动检测项目技术栈，生成定制化 E2E 全流程测试 Skills。
 
-通过分析项目的构建文件、依赖清单和目录结构，自动识别后端框架（Spring Boot、Django、FastAPI、Express、NestJS、Gin、ASP.NET Core）、前端框架（Vue 2/3、React、Angular、Next.js、Nuxt）、ORM 和数据库等技术要素，然后基于 Handlebars 模板引擎生成六个高度定制的 E2E 测试 Skill 文件，覆盖从代码追踪、用例生成、Playwright 执行到错误修复和报告生成的完整链路。
+通过分析项目的构建文件、依赖清单和目录结构，自动识别后端框架（Spring Boot、Django、FastAPI、Express、NestJS、Gin、ASP.NET Core、ThinkPHP、Laravel、Swoole）、前端框架（Vue 2/3、React、Angular、Next.js、Nuxt）、ORM 和数据库等技术要素，然后基于 Handlebars 模板引擎生成六个高度定制的 E2E 测试 Skill 文件，覆盖从代码追踪、用例生成、Playwright 执行到错误修复和报告生成的完整链路。
 
 ## 功能特点
 
 - **零配置启动** — 运行 `/e2e-skills-hub:init` 即可完成技术栈检测和 Skills 生成，无需手动编写配置文件
-- **通用技术栈支持** — 覆盖 Java、Python、Go、.NET、Node.js 后端以及 Vue、React、Angular 等主流前端框架
+- **通用技术栈支持** — 覆盖 Java、Python、Go、.NET、Node.js、PHP 后端以及 Vue、React、Angular 等主流前端框架
+- **MCP 自动配置** — 初始化时自动检测并安装 Playwright MCP，无需手动配置浏览器测试环境
 - **完整 E2E 流程** — 从接口追踪、测试用例生成、Playwright 自动化执行、失败修复到测试报告，形成闭环
 - **增量更新** — 代码变更后无需全量重新生成，通过 `/e2e-skills-hub:update` 仅更新受影响的 Skills
 
@@ -22,7 +23,7 @@ claude install e2e-skills-hub
 ### 方式二：手动 Git Clone
 
 ```bash
-git clone https://github.com/your-org/e2e-skills-hub.git
+git clone https://github.com/Try-catch-finally-awesome/e2e-skills-hub.git
 cd e2e-skills-hub
 npm install
 npm run build
@@ -79,8 +80,9 @@ npm run build
 | Java | Spring Boot, Spring MVC | MyBatis Plus, MyBatis, JPA/Hibernate | MySQL, PostgreSQL, MongoDB |
 | Python | Django, FastAPI, Flask | Django ORM, SQLAlchemy | MySQL, PostgreSQL, SQLite, MongoDB |
 | Go | Gin | GORM | MySQL, PostgreSQL, SQLite |
-| .NET | ASP.NET Core | Entity Framework | SQL Server, PostgreSQL, MySQL |
+| .NET | ASP.NET Core | Entity Framework, Dapper | SQL Server, PostgreSQL, MySQL |
 | Node.js | Express, NestJS | TypeORM, Prisma | MySQL, PostgreSQL, MongoDB |
+| PHP | ThinkPHP, Laravel, Swoole | Eloquent, think-orm | MySQL, PostgreSQL, Redis, MongoDB |
 
 ### 前端
 
