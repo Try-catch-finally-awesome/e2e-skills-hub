@@ -1,0 +1,45 @@
+```yaml
+表名提取方式（think-orm）:
+  a. 从 Model 的 $table 属性提取完整表名:
+     搜索: Grep(pattern="\\$table\\s*=", path="{{backend.projectPath}}/app/model")
+     示例:
+       protected $table = 'bos_orders';
+     → 表名: bos_orders（完整表名，含前缀）
+
+  b. 从 Model 的 $name 属性提取表名（不含前缀）:
+     搜索: Grep(pattern="\\$name\\s*=", path="{{backend.projectPath}}/app/model")
+     示例:
+       protected $name = 'order';
+     → 表名: order（ThinkPHP 自动加上 config/database.php 中配置的 prefix）
+
+  c. 从 Model 类名推断默认表名:
+     如 Model 没有定义 $table 或 $name 属性:
+     think-orm 默认规则: 类名转蛇形命名（不加复数）
+     示例:
+     - Order → order
+     - OrderDetail → order_detail
+     全局配置: config/database.php 中的 prefix 会自动添加前缀
+     示例: prefix = 'bos_' → order → bos_order
+
+  d. 从 Db 类查询中提取:
+     搜索: Grep(pattern="Db::table|Db::name|Db::connect", path="{{backend.projectPath}}/app")
+     示例:
+     - Db::table('bos_orders') → 表名: bos_orders（完整表名）
+     - Db::name('order') → 表名: order（自动加前缀）
+
+  e. 从关联方法提取关联表:
+     搜索: Grep(pattern="hasOne|hasMany|belongsTo|belongsToMany|morphTo|morphMany", path="{{backend.projectPath}}/app/model")
+     示例:
+     - $this->hasMany(OrderItem::class, 'order_id') → 关联 Model: OrderItem
+
+  f. 从 $field 属性提取可操作字段:
+     搜索: Grep(pattern="\\$field\\s*=|\\$disuse\\s*=|\\$readonly\\s*=", path="{{backend.projectPath}}/app/model")
+     - $field: 允许的字段列表
+     - $disuse: 废弃字段
+     - $readonly: 只读字段
+
+  g. 汇总所有关联表名:
+     - 主表: 从 $table/$name 属性或类名推断
+     - 关联表: 从关联方法中提取
+     - 直接查询表: 从 Db::table/Db::name 中提取
+```

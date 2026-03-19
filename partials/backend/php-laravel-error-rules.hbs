@@ -1,0 +1,33 @@
+```yaml
+判断条件（满足任一即归因为后端 - PHP Laravel）:
+  - 后端返回 HTTP 5xx（通过透传的错误信息判断）
+  - SQL 语法错误、字段不存在、约束违反（QueryException）
+  - 业务逻辑错误（状态流转不正确、计算错误、规则校验错误）
+  - 数据库查询结果与预期不符（写入了错误数据）
+  - 队列任务处理失败
+
+常见异常类型:
+  - QueryException: 数据库查询异常（SQL 语法错误、约束违反、连接失败）
+  - ValidationException: FormRequest 或 Validator 校验失败
+  - ModelNotFoundException: Eloquent findOrFail() 未找到记录
+  - AuthenticationException: 认证失败（未登录、Token 过期）
+  - AuthorizationException: 授权失败（无权限访问）
+  - NotFoundHttpException: 路由不存在（404）
+  - MethodNotAllowedHttpException: HTTP 方法不允许（405）
+  - TokenMismatchException: CSRF Token 不匹配
+  - MassAssignmentException: 批量赋值保护（$fillable/$guarded 配置错误）
+  - RelationNotFoundException: 模型关联关系不存在
+  - PDOException: 数据库连接或驱动层异常
+  - HttpException: 通用 HTTP 异常
+  - TypeError: PHP 类型错误（参数类型不匹配）
+  - BadMethodCallException: 调用不存在的方法（如 Scope 方法拼写错误）
+
+修复范围: {{backend.projectPath}}/app/ 下的文件
+编译验证: cd {{backend.projectPath}} && php artisan about
+
+服务重启提示:
+  - Laravel 修改 PHP 文件后通常不需要重启（使用 php artisan serve 时）
+  - 如修改了配置文件: php artisan config:clear
+  - 如修改了路由: php artisan route:clear
+  - 命令: cd {{backend.projectPath}} && php artisan serve
+```

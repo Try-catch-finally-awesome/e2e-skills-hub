@@ -1,0 +1,32 @@
+```yaml
+编译检查（PHP Swoole/Hyperf）:
+  扩展检查: php -m | grep swoole
+  说明: 检查 Swoole 扩展是否正确安装
+
+  语法检查:
+    cd {{backend.projectPath}} && find app/ -name "*.php" -exec php -l {} \;
+    说明: 对 app/ 目录下所有 PHP 文件进行语法检查
+
+  替代命令（快速检查单个文件）:
+    cd {{backend.projectPath}} && php -l app/Controller/XxxController.php
+
+  Hyperf 检查:
+    cd {{backend.projectPath}} && php bin/hyperf.php
+    说明: 检查 Hyperf 框架是否正常加载
+
+  检查项:
+    - Swoole 扩展是否安装且版本正确
+    - PHP 语法错误
+    - 注解语法是否正确（@Inject, @RequestMapping 等）
+    - 依赖注入容器配置是否正确
+    - 协程上下文使用是否正确
+    - 连接池配置是否合理
+
+  常见错误及修复:
+    - "Swoole extension is not installed": 安装 Swoole 扩展（pecl install swoole）
+    - "Parse error: syntax error": PHP 语法错误
+    - "Class not found": 类未找到，运行 composer dump-autoload
+    - "Coroutine::create failed": 协程创建失败，检查嵌套层级
+    - "Connection pool exhausted": 连接池耗尽，增加 pool.max_connections
+    - "Channel is closed": Channel 已关闭，检查生命周期管理
+```

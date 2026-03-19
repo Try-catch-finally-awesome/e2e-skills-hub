@@ -1,0 +1,35 @@
+```yaml
+表名提取方式（PHP Swoole/Hyperf + Model）:
+  a. 从 Model 的 $table 属性提取:
+     搜索: Grep(pattern="\\$table\\s*=", path="{{backend.projectPath}}/app/Model")
+     示例:
+       protected $table = 'bos_orders';
+     → 表名: bos_orders
+
+  b. 从 Model 类名推断默认表名:
+     如 Model 没有定义 $table 属性:
+     Hyperf 默认规则: 类名转蛇形复数（与 Laravel Eloquent 一致）
+     示例:
+     - User → users
+     - OrderDetail → order_details
+
+  c. 从 Migration 文件中提取表结构:
+     搜索: Grep(pattern="Schema::create|Schema::table", path="{{backend.projectPath}}/migrations")
+     示例:
+     - Schema::create('orders', function (Blueprint $table) { ... })
+     → 表名: orders
+
+  d. 从 Model 的关联方法中提取关联表:
+     搜索: Grep(pattern="hasOne|hasMany|belongsTo|belongsToMany", path="{{backend.projectPath}}/app/Model")
+     示例:
+     - $this->hasMany(OrderItem::class) → 关联表: order_items
+
+  e. 从 Db 类直接查询中提取:
+     搜索: Grep(pattern="Db::table|Db::select|Db::raw", path="{{backend.projectPath}}/app")
+     示例: Db::table('orders') → 表名: orders
+
+  f. 汇总所有关联表名:
+     - 主表: 从 $table 属性或类名推断
+     - 关联表: 从关联方法和 Migration 中提取
+     - 中间表: 从 belongsToMany 中提取
+```

@@ -1,0 +1,34 @@
+```yaml
+接口分析（PHP ThinkPHP）:
+  a. 读取路由配置文件，提取每个接口:
+     搜索路径: {{backend.projectPath}}/route/
+     - 路由: Route::get / Route::post / Route::put / Route::delete / Route::rule 的路径
+     - HTTP 方法: GET/POST/PUT/DELETE
+     - 绑定的 Controller 和方法
+     - 路由中间件: ->middleware()
+     - 路由分组: Route::group()
+
+  b. 读取 Controller 文件，提取方法信息:
+     搜索: Grep(pattern="public function", path="{{backend.projectPath}}/app/controller")
+     提取每个方法的:
+     - 方法名和参数列表
+     - Request 对象中获取的参数（$request->param / $request->post / $request->get）
+     - 返回格式（json() / view()）
+
+  c. 读取 Validate 验证器，提取校验规则:
+     搜索: Grep(pattern="\\$rule|\\$message", path="{{backend.projectPath}}/app/validate")
+     提取每个字段的:
+     - 'require' → 必填项
+     - 'max' / 'min' / 'length' → 长度限制
+     - 'number' / 'integer' / 'float' → 数值类型
+     - 'email' / 'url' / 'ip' → 格式校验
+     - 'regex' → 正则校验
+     - 'in' / 'notIn' → 枚举值限制
+     - 'between' → 数值范围
+     - 自定义验证规则
+
+  d. 读取 Service 层，提取业务约束:
+     - Db::transaction / Db::startTrans 事务边界
+     - 条件判断中的业务规则
+     - 抛出的业务异常类型和消息
+```

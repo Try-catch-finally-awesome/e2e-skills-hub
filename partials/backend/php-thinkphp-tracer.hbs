@@ -1,0 +1,34 @@
+```yaml
+搜索顺序:
+  a. 在后端项目中搜索路由定义:
+     Grep(pattern="{api_keyword}", path="{{backend.projectPath}}/route")
+     重点搜索: route/ 目录下的路由配置文件
+     匹配: Route::get / Route::post / Route::rule 等路由定义中包含 API 路径
+
+  b. 读取后端相关文件（ThinkPHP 分层结构）:
+     - 路由配置（Route::get, Route::post, Route::rule）
+       搜索路径: {{backend.projectPath}}/route/
+     - Controller 文件（继承 BaseController）
+       搜索路径: {{backend.projectPath}}/app/controller/
+     - Service 业务逻辑层
+       搜索路径: {{backend.projectPath}}/app/service/
+     - Model 模型类（继承 Model，定义 $table / $name）
+       搜索路径: {{backend.projectPath}}/app/model/
+     - Validate 验证器（定义 $rule 和 $message）
+       搜索路径: {{backend.projectPath}}/app/validate/
+     - 中间件
+       搜索路径: {{backend.projectPath}}/app/middleware/
+
+  c. 追踪调用链:
+     - 从路由配置找到对应的 Controller 类和方法
+     - 从 Controller 注入或实例化的 Service 找到业务逻辑
+     - 从 Service 调用的 Model 找到数据库操作
+     - 从 Model 的 $table 或 $name 属性提取表名
+
+  d. 记录每个文件的关键信息:
+     - Route: 路由路径、HTTP 方法、中间件
+     - Controller: 方法签名、参数验证、响应格式
+     - Service: 业务方法签名、事务处理（Db::transaction）
+     - Model: $table/$name 属性、关联关系（hasOne/hasMany/belongsTo）
+     - Validate: $rule 规则定义、$message 错误提示
+```

@@ -1,0 +1,32 @@
+```yaml
+编译检查（PHP Laravel）:
+  命令: cd {{backend.projectPath}} && php artisan about
+  说明: 检查 Laravel 框架状态和配置信息
+
+  语法检查:
+    cd {{backend.projectPath}} && find app/ -name "*.php" -exec php -l {} \;
+    说明: 对 app/ 目录下所有 PHP 文件进行语法检查
+
+  替代命令（快速检查单个文件）:
+    cd {{backend.projectPath}} && php -l app/Http/Controllers/XxxController.php
+
+  路由检查:
+    cd {{backend.projectPath}} && php artisan route:list
+    说明: 列出所有注册的路由，检查路由配置是否正确
+
+  检查项:
+    - PHP 语法错误（缺少分号、括号不匹配等）
+    - 类名与文件名不一致（PSR-4 自动加载）
+    - 命名空间错误
+    - use 语句引用不存在的类
+    - Service Provider 注册错误
+    - 配置文件格式错误
+
+  常见错误及修复:
+    - "Parse error: syntax error": PHP 语法错误
+    - "Class not found": 类未找到，运行 composer dump-autoload
+    - "Target class does not exist": Controller 或 Service 未正确注册
+    - "SQLSTATE": 数据库连接或查询错误
+    - "Route not defined": 路由名称未定义
+    - "Method not allowed": 路由 HTTP 方法不匹配
+```

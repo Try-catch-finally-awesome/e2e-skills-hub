@@ -1,0 +1,34 @@
+```yaml
+接口分析（PHP Swoole/Hyperf）:
+  a. 读取路由配置或注解，提取每个接口:
+     配置文件: {{backend.projectPath}}/config/routes.php
+     注解路由: Grep(pattern="@RequestMapping|@GetMapping|@PostMapping|@PutMapping|@DeleteMapping", path="{{backend.projectPath}}/app/Controller")
+     - 路由: 注解中的 path 参数或配置文件中的路径定义
+     - HTTP 方法: GET/POST/PUT/DELETE
+     - 绑定的 Controller 和方法
+     - 中间件: @Middleware 或 @Middlewares 注解
+
+  b. 读取 Controller 文件，提取方法信息:
+     搜索: Grep(pattern="public function", path="{{backend.projectPath}}/app/Controller")
+     提取每个方法的:
+     - 方法名和参数列表
+     - @Inject 注入的依赖
+     - RequestInterface 或自定义 Request 参数
+     - 返回格式（数组自动转 JSON）
+
+  c. 读取 Request 验证类，提取校验规则:
+     搜索: Grep(pattern="function rules|function authorize", path="{{backend.projectPath}}/app/Request")
+     提取每个字段的:
+     - 'required' → 必填项
+     - 'max' / 'min' → 长度或数值限制
+     - 'string' / 'integer' / 'numeric' → 类型校验
+     - 'in' / 'not_in' → 枚举值限制
+     - 自定义验证规则
+
+  d. 读取 Service 层，提取业务约束:
+     - Db::beginTransaction / Db::commit / Db::rollBack 事务处理
+     - 协程并发调用（parallel / Coroutine::create）
+     - Channel 通信逻辑
+     - 连接池使用
+     - 抛出的业务异常类型和消息
+```

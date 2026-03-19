@@ -1,0 +1,26 @@
+```yaml
+编译检查（PHP ThinkPHP）:
+  命令: cd {{backend.projectPath}} && php think version
+  说明: 检查 ThinkPHP 框架是否正常加载
+
+  语法检查:
+    cd {{backend.projectPath}} && find app/ -name "*.php" -exec php -l {} \;
+    说明: 对 app/ 目录下所有 PHP 文件进行语法检查
+
+  替代命令（快速检查单个文件）:
+    cd {{backend.projectPath}} && php -l app/controller/XxxController.php
+
+  检查项:
+    - PHP 语法错误（缺少分号、括号不匹配等）
+    - 类名与文件名不一致
+    - 命名空间错误
+    - use 语句引用不存在的类
+    - 方法签名类型声明错误
+
+  常见语法错误及修复:
+    - "Parse error: syntax error": PHP 语法错误（缺少分号、括号等）
+    - "Class not found": 类未找到，检查 namespace 和 use 语句
+    - "Call to undefined method": 方法不存在，检查拼写和类继承
+    - "Cannot redeclare": 函数或类重复定义
+    - "Allowed memory size exhausted": 内存不足，检查递归或大数据处理
+```

@@ -1,0 +1,32 @@
+```yaml
+判断条件（满足任一即归因为后端 - PHP Swoole/Hyperf）:
+  - 后端返回 HTTP 5xx（通过透传的错误信息判断）
+  - SQL 语法错误、字段不存在、约束违反
+  - 业务逻辑错误（状态流转不正确、计算错误、规则校验错误）
+  - 协程异常或死锁
+  - 连接池耗尽或超时
+
+常见异常类型:
+  - PDOException: 数据库连接失败或 SQL 执行错误
+  - QueryException: 数据库查询异常
+  - ValidationException: 请求参数校验失败
+  - RuntimeException: 运行时异常（协程上下文、容器注入等）
+  - ChannelClosedException: Channel 已关闭但仍尝试读写
+  - WaitTimeoutException: 协程等待超时
+  - ConnectionException: 连接池连接获取失败或连接断开
+  - ParallelExecutionException: 并行执行异常（parallel 中的协程失败）
+  - SocketException: Socket 通信异常
+  - ServerException: Swoole Server 异常
+  - InvalidArgumentException: 参数无效
+  - ModelNotFoundException: 模型查找失败
+  - TypeError: PHP 类型错误
+  - LogicException: 逻辑错误（如重复启动服务等）
+
+修复范围: {{backend.projectPath}}/app/ 下的文件
+编译验证: cd {{backend.projectPath}} && php -m | grep swoole && php -l app/
+
+服务重启提示:
+  - Swoole/Hyperf 是常驻内存运行，修改 PHP 文件后必须重启服务
+  - 开发环境热重载: php bin/hyperf.php server:watch
+  - 普通重启: cd {{backend.projectPath}} && php bin/hyperf.php start
+```

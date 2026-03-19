@@ -1,0 +1,36 @@
+```yaml
+搜索顺序:
+  a. 在后端项目中搜索路由配置:
+     Grep(pattern="{api_keyword}", path="{{backend.projectPath}}/config")
+     重点搜索: config/routes.php 或 Controller 中的注解路由
+     匹配: Router::get / Router::post / @RequestMapping / @GetMapping 等路由定义
+
+  b. 读取后端相关文件（Swoole/Hyperf 分层结构）:
+     - 路由配置（注解路由或配置文件路由）
+       搜索路径: {{backend.projectPath}}/config/routes.php
+       注解搜索: Grep(pattern="@RequestMapping|@GetMapping|@PostMapping", path="{{backend.projectPath}}/app/Controller")
+     - Controller 文件（使用注解或配置路由）
+       搜索路径: {{backend.projectPath}}/app/Controller/
+     - Service 业务逻辑层（依赖注入）
+       搜索路径: {{backend.projectPath}}/app/Service/
+     - Model 模型类（继承 Model）
+       搜索路径: {{backend.projectPath}}/app/Model/
+     - Request 请求验证
+       搜索路径: {{backend.projectPath}}/app/Request/
+     - Process 自定义进程
+       搜索路径: {{backend.projectPath}}/app/Process/
+
+  c. 追踪调用链:
+     - 从路由注解或配置文件找到对应的 Controller
+     - 从 Controller 通过 @Inject 注入的 Service 找到业务逻辑
+     - 从 Service 使用的 Model 找到数据库操作
+     - 从 Model 的 $table 属性提取表名
+
+  d. 记录每个文件的关键信息:
+     - Route: 路由路径、HTTP 方法、中间件
+     - Controller: 方法签名、注解路由、注入的依赖
+     - Service: 业务方法签名、协程上下文、事务处理
+     - Model: $table 属性、$fillable、关联关系
+     - Request: 验证规则
+     - Process: 自定义进程逻辑、定时任务
+```

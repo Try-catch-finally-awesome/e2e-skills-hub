@@ -1,0 +1,45 @@
+```yaml
+表名提取方式（Eloquent ORM）:
+  a. 从 Eloquent Model 的 $table 属性提取:
+     搜索: Grep(pattern="\\$table\\s*=", path="{{backend.projectPath}}/app/Models")
+     示例:
+       protected $table = 'bos_orders';
+     → 表名: bos_orders
+
+  b. 从 Model 类名推断默认表名（蛇形复数规则）:
+     如 Model 没有定义 $table 属性:
+     Eloquent 默认规则: 类名 → 蛇形命名 → 复数形式
+     示例:
+     - User → users
+     - OrderDetail → order_details
+     - Category → categories
+     - Person → people（不规则复数）
+     - Mouse → mice（不规则复数）
+
+  c. 从 $fillable / $guarded 属性提取可操作字段:
+     搜索: Grep(pattern="\\$fillable|\\$guarded", path="{{backend.projectPath}}/app/Models")
+     示例:
+     - protected $fillable = ['name', 'email', 'password'];
+     → 可批量赋值字段: name, email, password
+
+  d. 从关联方法提取关联表:
+     搜索: Grep(pattern="hasOne|hasMany|belongsTo|belongsToMany|morphTo|morphMany|morphToMany|hasManyThrough|hasOneThrough", path="{{backend.projectPath}}/app/Models")
+     示例:
+     - $this->hasMany(OrderItem::class) → 关联表: order_items
+     - $this->belongsToMany(Role::class) → 中间表: role_user（默认按字母序拼接）
+     - $this->belongsToMany(Role::class, 'user_roles') → 中间表: user_roles
+
+  e. 从 Migration 文件确认表结构:
+     搜索: Grep(pattern="Schema::create", path="{{backend.projectPath}}/database/migrations")
+     提取完整的表结构定义、索引、外键等
+
+  f. 从 scope 查询作用域中提取额外表引用:
+     搜索: Grep(pattern="function scope|whereHas|withCount|join|leftJoin", path="{{backend.projectPath}}/app/Models")
+     可能引用其他表的 JOIN 或子查询
+
+  g. 汇总所有关联表名:
+     - 主表: 从 $table 属性或类名推断
+     - 关联表: 从 hasOne/hasMany/belongsTo 等方法中提取
+     - 中间表: 从 belongsToMany 的第二个参数或默认规则推断
+     - JOIN 表: 从 scope 和自定义查询中提取
+```

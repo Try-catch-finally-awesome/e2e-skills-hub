@@ -99,7 +99,18 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 
 ### 步骤 3: 环境检查（阶段 0）
 
-1. **检查前端服务**：
+1. **检查 Playwright MCP 可用性**：
+   ```
+   Bash: claude mcp get playwright 2>&1
+   ```
+   - 如果未配置 → 自动安装：
+     ```
+     Playwright MCP 未配置，正在自动安装...
+     Bash: claude mcp add playwright -- npx -y @playwright/mcp@latest
+     ```
+   - 安装失败 → 终止并提示手动安装命令
+
+2. **检查前端服务**：
    ```
    Bash: curl -s -o /dev/null -w "%{http_code}" http://localhost:{frontend.port}/ 2>/dev/null || echo "FAIL"
    ```

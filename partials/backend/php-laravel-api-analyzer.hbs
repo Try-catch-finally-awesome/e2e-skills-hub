@@ -1,0 +1,45 @@
+```yaml
+接口分析（PHP Laravel）:
+  a. 读取路由配置文件，提取每个接口:
+     搜索路径: {{backend.projectPath}}/routes/api.php 和 routes/web.php
+     - 路由: Route::get / Route::post / Route::put / Route::delete / Route::apiResource 的路径
+     - HTTP 方法: GET/POST/PUT/DELETE
+     - 绑定的 Controller 和方法
+     - 路由中间件: ->middleware()
+     - 路由分组: Route::group() / Route::prefix()
+     - 路由名称: ->name()
+
+  b. 读取 Controller 文件，提取方法信息:
+     搜索: Grep(pattern="public function", path="{{backend.projectPath}}/app/Http/Controllers")
+     提取每个方法的:
+     - 方法名和参数列表
+     - 依赖注入的 FormRequest 类
+     - 返回格式（response()->json() / view() / Resource::collection()）
+     - 路由模型绑定参数
+
+  c. 读取 FormRequest 文件，提取校验规则:
+     搜索: Grep(pattern="function rules|function authorize", path="{{backend.projectPath}}/app/Http/Requests")
+     提取 rules() 方法中每个字段的:
+     - 'required' → 必填项
+     - 'max' / 'min' → 长度或数值限制
+     - 'string' / 'integer' / 'numeric' / 'boolean' → 类型校验
+     - 'email' / 'url' / 'ip' → 格式校验
+     - 'regex' → 正则校验
+     - 'in' / 'not_in' → 枚举值限制
+     - 'exists' / 'unique' → 数据库约束
+     - 'confirmed' → 确认字段
+     - 'date' / 'after' / 'before' → 日期校验
+     - 自定义验证规则
+
+  d. 读取 Resource 文件，提取响应结构:
+     搜索: Grep(pattern="function toArray", path="{{backend.projectPath}}/app/Http/Resources")
+     - 返回字段列表和格式
+     - 嵌套 Resource
+     - 条件字段（when / whenLoaded）
+
+  e. 读取 Service 层，提取业务约束:
+     - DB::transaction 事务边界
+     - 条件判断中的业务规则
+     - 抛出的业务异常类型和消息
+     - Event 事件触发
+```

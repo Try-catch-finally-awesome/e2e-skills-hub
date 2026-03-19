@@ -1,0 +1,29 @@
+```yaml
+判断条件（满足任一即归因为后端 - PHP ThinkPHP）:
+  - 后端返回 HTTP 5xx（通过透传的错误信息判断）
+  - SQL 语法错误、字段不存在、约束违反（PDO 异常）
+  - 业务逻辑错误（状态流转不正确、计算错误、规则校验错误）
+  - 数据库查询结果与预期不符（写入了错误数据）
+
+常见异常类型:
+  - PDOException: 数据库连接失败或 SQL 执行错误
+  - ValidateException: think-validate 校验失败
+  - HttpException: HTTP 状态码异常（404、405、500 等）
+  - ModelNotFoundException: 模型查找失败（数据不存在）
+  - DataNotFoundException: 数据未找到
+  - DbException: 数据库操作异常（表不存在、字段错误等）
+  - InvalidArgumentException: 参数类型或值无效
+  - RouteNotFoundException: 路由不存在
+  - ClassNotFoundException: 控制器或类未找到
+  - FuncNotFoundException: 方法不存在
+  - HttpResponseException: 直接中断响应
+  - TypeError: PHP 类型错误（参数类型不匹配）
+
+修复范围: {{backend.projectPath}}/app/ 下的文件
+编译验证: cd {{backend.projectPath}} && php -l app/
+
+服务重启提示:
+  - ThinkPHP 修改 PHP 文件后通常不需要重启（非常驻进程模式）
+  - 如使用 Swoole 模式运行: 需要重启服务
+  - 命令: cd {{backend.projectPath}} && php think run
+```

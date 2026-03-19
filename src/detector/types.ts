@@ -3,7 +3,7 @@
  */
 
 /** 后端语言 */
-export type BackendLanguage = 'java' | 'python' | 'go' | 'dotnet' | 'nodejs';
+export type BackendLanguage = 'java' | 'python' | 'go' | 'dotnet' | 'nodejs' | 'php';
 
 /** 项目架构类型 */
 export type Architecture = 'monolith' | 'separated' | 'microservice';

@@ -1,0 +1,40 @@
+```yaml
+搜索顺序:
+  a. 在后端项目中搜索路由定义:
+     Grep(pattern="{api_keyword}", path="{{backend.projectPath}}/routes")
+     重点搜索: routes/api.php 和 routes/web.php
+     匹配: Route::get / Route::post / Route::apiResource 等路由定义中包含 API 路径
+
+  b. 读取后端相关文件（Laravel 分层结构）:
+     - 路由配置（Route::get, Route::post, Route::apiResource）
+       搜索路径: {{backend.projectPath}}/routes/
+     - Controller 文件（继承 Controller）
+       搜索路径: {{backend.projectPath}}/app/Http/Controllers/
+     - Service 业务逻辑层
+       搜索路径: {{backend.projectPath}}/app/Services/
+     - Model 模型类（继承 Model，使用 Eloquent ORM）
+       搜索路径: {{backend.projectPath}}/app/Models/
+     - FormRequest 表单请求验证
+       搜索路径: {{backend.projectPath}}/app/Http/Requests/
+     - Resource 资源转换（API 响应格式）
+       搜索路径: {{backend.projectPath}}/app/Http/Resources/
+     - Migration 数据库迁移
+       搜索路径: {{backend.projectPath}}/database/migrations/
+     - 中间件
+       搜索路径: {{backend.projectPath}}/app/Http/Middleware/
+
+  c. 追踪调用链:
+     - 从 routes/api.php 或 routes/web.php 找到对应的 Controller
+     - 从 Controller 注入的 Service 找到业务逻辑
+     - 从 Service 使用的 Model 找到数据库操作
+     - 从 Model 的 $table 属性或类名推断表名（如 User → users）
+     - 从 Migration 文件确认表结构
+
+  d. 记录每个文件的关键信息:
+     - Route: 路由路径、HTTP 方法、中间件、路由名称
+     - Controller: 方法签名、依赖注入、FormRequest 参数
+     - Service: 业务方法签名、事务处理（DB::transaction）
+     - Model: $table 属性、$fillable/$guarded、关联关系（hasOne/hasMany/belongsTo）
+     - FormRequest: rules() 校验规则、authorize() 权限检查
+     - Resource: toArray() 响应字段格式
+```

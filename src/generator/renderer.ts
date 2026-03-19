@@ -136,6 +136,48 @@ async function loadTemplate(
 }
 
 /**
+ * 根据技术栈上下文注册 partial 别名
+ * 模板中使用通用名如 {{> frontend/tracer}}，实际文件名如 frontend/vue3-tracer
+ * 此函数将通用名映射到当前技术栈对应的具体 partial
+ */
+function registerContextAliases(hbs: typeof Handlebars, context: TemplateContext): void {
+  const backendKey = `${context.backend.language}-${context.backend.framework}`;
+  const frontendKey = context.frontend.framework;
+  const ormKey = context.backend.orm;
+
+  // 后端 partial 别名
+  const backendPartials = ['tracer', 'table-extractor', 'api-analyzer', 'error-rules', 'build-check', 'output-format'];
+  for (const suffix of backendPartials) {
+    const specificName = `backend/${backendKey}-${suffix}`;
+    const genericName = `backend/${suffix}`;
+    const partial = hbs.partials[specificName];
+    if (partial) {
+      hbs.registerPartial(genericName, partial);
+    }
+  }
+
+  // 前端 partial 别名
+  const frontendPartials = ['tracer', 'service-tracer', 'page-analyzer', 'error-rules'];
+  for (const suffix of frontendPartials) {
+    const specificName = `frontend/${frontendKey}-${suffix}`;
+    const genericName = `frontend/${suffix}`;
+    const partial = hbs.partials[specificName];
+    if (partial) {
+      hbs.registerPartial(genericName, partial);
+    }
+  }
+
+  // ORM partial 别名
+  const ormSpecific = `orm/${ormKey}-table-extractor`;
+  const ormPartial = hbs.partials[ormSpecific];
+  if (ormPartial) {
+    hbs.registerPartial('orm/table-extractor', ormPartial);
+  }
+
+  logger.debug(`已注册 partial 别名: backend=${backendKey}, frontend=${frontendKey}, orm=${ormKey}`);
+}
+
+/**
  * 渲染单个 skill 模板
  */
 export async function renderSkill(
@@ -144,6 +186,10 @@ export async function renderSkill(
   context: TemplateContext,
 ): Promise<string> {
   const hbs = await initHandlebars(config.rootDir);
+
+  // 根据上下文注册通用 partial 别名
+  registerContextAliases(hbs, context);
+
   const template = await loadTemplate(hbs, config.rootDir, templateName);
 
   try {

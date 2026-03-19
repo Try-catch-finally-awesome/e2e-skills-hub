@@ -9,6 +9,7 @@ import { scan as scanPython } from './scanners/python-scanner.js';
 import { scan as scanGo } from './scanners/go-scanner.js';
 import { scan as scanDotnet } from './scanners/dotnet-scanner.js';
 import { scan as scanNodejs } from './scanners/nodejs-scanner.js';
+import { scan as scanPhp } from './scanners/php-scanner.js';
 import { scan as scanFrontend } from './scanners/frontend-scanner.js';
 import { pathExists } from '../utils/file.js';
 import logger from '../utils/logger.js';
@@ -190,13 +191,14 @@ export async function detect(options: DetectOptions): Promise<TechStackDetection
   const effectiveFrontendPath = frontendPath ?? projectPath;
 
   // 并行运行所有后端 scanner
-  const [javaResult, pythonResult, goResult, dotnetResult, nodejsResult] =
+  const [javaResult, pythonResult, goResult, dotnetResult, nodejsResult, phpResult] =
     await Promise.all([
       scanJava(effectiveBackendPath),
       scanPython(effectiveBackendPath),
       scanGo(effectiveBackendPath),
       scanDotnet(effectiveBackendPath),
       scanNodejs(effectiveBackendPath),
+      scanPhp(effectiveBackendPath),
     ]);
 
   // 运行前端 scanner
@@ -214,6 +216,8 @@ export async function detect(options: DetectOptions): Promise<TechStackDetection
     backendResults.push({ result: dotnetResult, path: effectiveBackendPath });
   if (nodejsResult.detected)
     backendResults.push({ result: nodejsResult, path: effectiveBackendPath });
+  if (phpResult.detected)
+    backendResults.push({ result: phpResult, path: effectiveBackendPath });
 
   // 合并警告
   for (const { result } of backendResults) {

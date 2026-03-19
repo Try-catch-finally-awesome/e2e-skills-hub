@@ -141,9 +141,49 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 
 #### 2.4 检测 MCP 工具可用性
 
-1. 检查 `.claude/settings.json` 或 `.claude/settings.local.json` 中的 MCP 配置
-2. 识别是否配置了数据库 MCP（mysql/pg 等）
-3. 识别是否配置了 Playwright MCP
+1. 检查 Playwright MCP 是否已配置：
+   ```
+   Bash: claude mcp get playwright 2>&1
+   ```
+   - 如果返回配置信息 → 已配置，记录 `mcp.playwright.available = true`
+   - 如果返回错误/未找到 → 未配置，进入步骤 2.5 自动安装
+
+2. 检查数据库 MCP 是否已配置：
+   ```
+   Bash: claude mcp list 2>&1
+   ```
+   - 从输出中搜索 `mysql`/`postgres`/`sqlite` 关键词
+   - 找到则记录 MCP 名称和配置
+
+#### 2.5 自动安装 Playwright MCP（如未配置）
+
+如果步骤 2.4 检测到 Playwright MCP 未配置，自动安装：
+
+1. 提示用户：
+   ```
+   检测到 Playwright MCP 未配置。Playwright MCP 是执行 E2E 测试的必要组件。
+   正在自动配置...
+   ```
+
+2. 执行安装命令：
+   ```
+   Bash: claude mcp add playwright -- npx -y @playwright/mcp@latest
+   ```
+
+3. 验证安装成功：
+   ```
+   Bash: claude mcp get playwright 2>&1
+   ```
+   - 成功 → 输出 `✓ Playwright MCP 已配置`
+   - 失败 → 输出警告 `警告: Playwright MCP 自动配置失败，请手动执行: claude mcp add playwright -- npx -y @playwright/mcp@latest`
+
+4. 如果用户的项目使用了 MySQL 或 PostgreSQL 数据库，且数据库 MCP 未配置，提示用户（不自动安装，因为需要连接信息）：
+   ```
+   提示: 检测到项目使用 {database}，建议配置数据库 MCP 以启用数据验证功能。
+   配置命令示例:
+     claude mcp add mysql-db -- npx -y @anthropic-ai/mcp-mysql --host localhost --port 3306 --user root --database {dbname}
+   不配置也可以使用，测试时将跳过数据库验证步骤。
+   ```
 
 ### 步骤 3: 展示检测结果，请求用户确认
 
@@ -280,4 +320,5 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 | 模板文件缺失 | 输出错误：`错误: 未找到模板文件 {template_name}，请检查插件安装是否完整` |
 | 输出目录写入权限不足 | 输出错误：`错误: 无法写入目录 <dir>，请检查权限` |
 | 已有 skills 存在（非首次初始化） | 提示用户：`检测到已存在的 E2E Skills，继续将覆盖现有文件。确认继续？(y/n)` |
-| MCP 工具未配置 | 输出警告但不阻塞：`警告: 未检测到 Playwright MCP 配置，测试执行时将需要手动配置` |
+| Playwright MCP 未配置 | 自动执行 `claude mcp add playwright -- npx -y @playwright/mcp@latest` 安装；若安装失败则输出手动安装命令 |
+| 数据库 MCP 未配置 | 输出提示和配置命令示例，不阻塞流程（数据库验证为可选功能） |
