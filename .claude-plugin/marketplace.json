@@ -7,9 +7,13 @@
   "plugins": [
     {
       "name": "e2e-skills-hub",
-      "source": "./",
       "description": "Auto-detect project tech stacks and generate customized E2E testing skills.",
-      "category": "testing"
+      "category": "testing",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/Try-catch-finally-awesome/e2e-skills-hub.git"
+      },
+      "homepage": "https://github.com/Try-catch-finally-awesome/e2e-skills-hub"
     }
   ]
 }
