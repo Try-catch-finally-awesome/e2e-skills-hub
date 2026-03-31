@@ -10,7 +10,7 @@
     {
       "name": "e2e-skills-hub",
       "description": "Auto-detect project tech stacks and generate customized E2E testing skills. Supports Java/Python/Go/.NET/Node.js/PHP backends with React/Vue/Angular frontends.",
-      "source": ".",
+      "source": "./",
       "category": "testing",
       "homepage": "https://github.com/Try-catch-finally-awesome/e2e-skills-hub"
     }
