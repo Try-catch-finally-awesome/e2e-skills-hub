@@ -23,7 +23,13 @@ Claude Code 插件，自动检测项目技术栈，生成定制化 E2E 全流程
 /plugin install e2e-skills-hub@e2e-skills-hub
 ```
 
-安装后插件会自动注册所有 `/e2e-skills-hub:*` 命令。
+安装后执行 `/reload-plugins` 重新加载，插件会自动注册所有 `/e2e-skills-hub:*` 命令。
+
+> **提示：** 如果安装时遇到 SSH 相关错误（如 `Host key verification failed` 或 `Permission denied (publickey)`），可以配置 Git 对 GitHub 使用 HTTPS 协议：
+> ```bash
+> git config --global url."https://github.com/".insteadOf "git@github.com:"
+> ```
+> 配置后重新执行上述安装命令即可。
 
 ### 方式二：本地开发模式
 
